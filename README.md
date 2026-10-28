@@ -70,12 +70,15 @@ Exit codes: `0` success (including an empty report), `1` git/IO failure with `Wh
 ```text
 driftwood/
 ├── driftwood/
+│   ├── __init__.py       <- public API re-exports and version
+│   ├── __main__.py       <- `python -m driftwood` entry point
 │   ├── cli.py            <- argparse entry point, filters, exit codes
 │   ├── gitlog.py         <- git log --numstat parsing and churn aggregation
 │   ├── complexity.py     <- Python token and generic line complexity metrics
 │   ├── scoring.py        <- normalization, weighting, deterministic ranking
 │   └── report.py         <- table and JSON rendering
 ├── tests/                <- unittest shield for every metric and the CLI
+├── assets/               <- approved logo and social preview
 ├── pyproject.toml        <- package metadata, console script
 ├── .gitignore            <- transient AIKit state excluded
 ├── LICENSE               <- Aegean License 1.1 (AL-1.1): free personal use

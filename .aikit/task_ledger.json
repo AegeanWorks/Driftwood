@@ -5,7 +5,7 @@
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1793216885.965299,
+    "updated_at": 1793216984.6093407,
     "owner": "kilo:driftwood",
     "started_by": "kilo:driftwood",
     "continuations": []
@@ -94,6 +94,22 @@
         "next": "commit and publish",
         "open": "none",
         "evidence": "python aikit.py check driftwood"
+      }
+    },
+    {
+      "task_id": "driftwood-review",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[milestone 3/3] README tree now lists assets and package entry points; strict gates 4/4; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793216984.6093407,
+      "timestamp_str": "2026-10-28 22:49:44",
+      "agent": "kilo:driftwood",
+      "handoff": {
+        "state": "37 tests green",
+        "next": "commit README fix, publish, push",
+        "evidence": "check --strict 4/4 after fix"
       }
     }
   ]
