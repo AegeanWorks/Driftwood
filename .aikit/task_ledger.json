@@ -1,5 +1,100 @@
 {
   "version": 1,
-  "active_task": null,
-  "checkpoints": []
+  "active_task": {
+    "task_id": "driftwood-review",
+    "last_phase": "phase 4",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793216885.965299,
+    "owner": "kilo:driftwood",
+    "started_by": "kilo:driftwood",
+    "continuations": []
+  },
+  "checkpoints": [
+    {
+      "task_id": "driftwood-hotspots",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Scaffold driftwood package, git churn parser and baseline tests",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793215804.0007122,
+      "timestamp_str": "2026-10-28 22:30:04",
+      "agent": "kilo:driftwood",
+      "impact_assessment": {
+        "why": "A maintainer needs an offline signal for where refactoring pays off, built from local git history only.",
+        "benefits": "Ranked hotspot report with reproducible scores and a unit-test shield for every metric.",
+        "risks": "contract: new project, no public API yet; dependency: stdlib only, no third-party packages; concurrency: none, single-process CLI; state: read-only over the target repository, no writes.",
+        "mitigation": "Keep every metric a small pure function with its own test; CLI is the only side-effecting layer."
+      },
+      "handoff": {
+        "next": "build driftwood package and tests",
+        "evidence": "aikit new created project at projects/driftwood"
+      }
+    },
+    {
+      "task_id": "driftwood-hotspots",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[milestone 4/4] CLI, report, README and tests delivered; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793216285.1837852,
+      "timestamp_str": "2026-10-28 22:38:05",
+      "agent": "kilo:driftwood",
+      "handoff": {
+        "state": "31 tests green, aikit check 4/4",
+        "next": "none",
+        "open": "uncommitted files (commit not authorized)",
+        "evidence": "python -m driftwood . --top 5 ranks hotspots"
+      }
+    },
+    {
+      "task_id": "driftwood-hotspots",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'driftwood-hotspots' completed successfully.",
+      "status": "completed",
+      "timestamp": 1793216291.8954961,
+      "timestamp_str": "2026-10-28 22:38:11",
+      "agent": "kilo:driftwood"
+    },
+    {
+      "task_id": "driftwood-review",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/3] Review hardening: fix flat-metric scoring, CLI validation and dead code; add real-git integration tests",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793216705.8156283,
+      "timestamp_str": "2026-10-28 22:45:05",
+      "agent": "kilo:driftwood",
+      "impact_assessment": {
+        "why": "The first delivery had a scoring edge case, unvalidated numeric flags, dead helper code and only mocked git coverage.",
+        "benefits": "Correct scores for small repos, exit-2 argument errors, verified rename/history parsing against real git, 37 green tests.",
+        "risks": "contract: Hotspot score semantics for flat metrics change; dependency: none added; concurrency: none; state: read-only over target repos.",
+        "mitigation": "Documented the saturation rule in README and covered it plus the CLI validation with tests."
+      },
+      "handoff": {
+        "next": "run gates, commit and publish driftwood"
+      }
+    },
+    {
+      "task_id": "driftwood-review",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[milestone 3/3] Hardening shipped: saturating normalize, CLI validators, real-git tests, ADR-002, media applied; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793216885.965299,
+      "timestamp_str": "2026-10-28 22:48:05",
+      "agent": "kilo:driftwood",
+      "handoff": {
+        "state": "37 tests, 4/4 gates",
+        "next": "commit and publish",
+        "open": "none",
+        "evidence": "python aikit.py check driftwood"
+      }
+    }
+  ]
 }

@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "name": "driftwood",
+  "repo": "Driftwood",
+  "has_ui": false,
+  "ui_kind": "library",
+  "palette": [
+    "#12070d",
+    "#301213",
+    "#f566a4",
+    "#f5d68e"
+  ],
+  "motif": "pulse",
+  "layout": "wave",
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T22:29:13",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo-driftwood",
+        "method": "structural",
+        "notes": "Pulse mark on dark gradient, 512px square, title/desc present, readable at small size",
+        "score": 82,
+        "reviewed_at": "2026-10-28T22:46:31"
+      }
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T22:29:13",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo-driftwood",
+        "method": "structural",
+        "notes": "1280x640, description fits three lines, brand strip and tag pills legible, repo URL correct",
+        "score": 84,
+        "reviewed_at": "2026-10-28T22:46:32"
+      }
+    }
+  },
+  "screenshots": []
+}

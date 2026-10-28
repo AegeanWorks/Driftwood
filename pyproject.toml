@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "driftwood"
+version = "0.1.0"
+description = "Rank code hotspots by combining git churn with file complexity."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "LicenseRef-AL-1.1" }
+authors = [{ name = "AegeanWorks" }]
+keywords = ["git", "static-analysis", "cli", "developer-tools"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/AegeanWorks/Driftwood"
+Repository = "https://github.com/AegeanWorks/Driftwood"
+Issues = "https://github.com/AegeanWorks/Driftwood/issues"
+
+[project.scripts]
+driftwood = "driftwood.cli:main"
+
+[tool.setuptools]
+packages = ["driftwood"]
