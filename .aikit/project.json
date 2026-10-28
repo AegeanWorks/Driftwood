@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "name": "driftwood",
+  "test_command": null,
+  "topics": [
+    "aikit",
+    "aikit-integrated",
+    "source-available",
+    "aegean-license",
+    "commercial-license",
+    "git",
+    "static-analysis",
+    "cli",
+    "developer-tools"
+  ],
+  "gates": {},
+  "ui_required": false,
+  "created": "2026-10-28"
+}
