@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "driftwood-review",
+    "task_id": "driftwood-reforge-fixes",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793216984.6093407,
-    "owner": "kilo:driftwood",
-    "started_by": "kilo:driftwood",
-    "continuations": [],
-    "completed_at": 1793217066.9250822
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793291795.5932515,
+    "owner": "opencode:reforge-followup",
+    "started_by": "opencode:reforge-followup",
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -122,6 +121,67 @@
       "timestamp": 1793217066.9250834,
       "timestamp_str": "2026-10-28 22:51:06",
       "agent": "kilo:driftwood"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 1",
+      "phase_num": 3,
+      "description": "Reforge stage 1: window 3, 3 commit(s), 22 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793291038.235267,
+      "timestamp_str": "2026-10-29 19:23:58",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: window 4, 1 commit(s), 9 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793291361.336767,
+      "timestamp_str": "2026-10-29 19:29:21",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: run stopped at stage 2; resume it with `reforge resume`",
+      "files_affected": [],
+      "status": "suspended",
+      "timestamp": 1793291439.1232123,
+      "timestamp_str": "2026-10-29 19:30:39",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "driftwood-reforge-fixes",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Fix remaining Reforge findings: quoted git paths, --include test, license references",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793291778.425303,
+      "timestamp_str": "2026-10-29 19:36:18",
+      "agent": "opencode:reforge-followup",
+      "impact_assessment": {
+        "why": "Reforge reported three findings beyond the two auto-repaired ones; the non-ASCII path bug corrupts hotspot rows and complexity.",
+        "benefits": "Non-ASCII repositories report real paths and complexity; --include has a regression test; the license text links the canonical CLA and ACL instead of missing local files.",
+        "risks": "contract: normalize_path now preserves literal backslashes in quoted paths; dependency: stdlib codecs only; concurrency: none; state: no state format change.",
+        "mitigation": "Unit and real-git integration tests pin the decoded path and backslash behavior; project gates run before commit."
+      }
+    },
+    {
+      "task_id": "driftwood-reforge-fixes",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[milestone 1/1] Remaining Reforge fixes and tests complete; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793291795.5932515,
+      "timestamp_str": "2026-10-29 19:36:35",
+      "agent": "opencode:reforge-followup"
     }
   ]
 }

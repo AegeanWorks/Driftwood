@@ -8,9 +8,9 @@
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `14`
 - **Total Classes**: `15`
-- **Total Top-Level Functions**: `23`
-- **Total Class Methods**: `42`
-- **Total Source Lines**: `907`
+- **Total Top-Level Functions**: `24`
+- **Total Class Methods**: `46`
+- **Total Source Lines**: `948`
 
 ---
 
@@ -31,7 +31,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `102` lines (`3355` bytes)
+**Size**: `102` lines (`3391` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -59,7 +59,7 @@
 ### [`driftwood/gitlog.py`](driftwood/gitlog.py)
 > *Read per-file churn from a local git repository without third-party tools.*
 
-**Size**: `125` lines (`4059` bytes)
+**Size**: `138` lines (`4548` bytes)
 
 **Classes:**
 - `class GitError` - *A git invocation failed; the message carries Why and Fix guidance.*
@@ -69,6 +69,7 @@
 
 **Functions:**
 - `def _run_git(repo, args)`
+- `def _unquote_path(raw)` - *Decode git's C-style quoted path and say whether the input was quoted.*
 - `def normalize_path(raw)` - *Reduce git's rename notation to the newest path, using forward slashes.*
 - `def parse_numstat(text)` - *Aggregate `git log --numstat --format=__COMMIT__%H` output per file.*
 - `def collect_churn(repo, *, since, max_commits, runner)` - *Return `{path: FileChurn}` for history up to `max_commits` commits.*
@@ -108,7 +109,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `79` lines (`2990` bytes)
+**Size**: `91` lines (`3424` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -116,6 +117,7 @@
   - Method `.test_table_output_sorted_by_score()`
   - Method `.test_json_output()`
   - Method `.test_exclude_filter_drops_paths()`
+  - Method `.test_include_filter_keeps_matching_paths()`
   - Method `.test_git_error_returns_one_with_remediation()`
   - Method `.test_min_score_filters_before_top_slices()`
   - Method `.test_invalid_numeric_flags_exit_two()`
@@ -143,7 +145,7 @@
 ---
 
 ### [`tests/test_gitlog.py`](tests/test_gitlog.py)
-**Size**: `98` lines (`2936` bytes)
+**Size**: `104` lines (`3205` bytes)
 
 **Classes:**
 - `class ParseNumstatTests`
@@ -154,6 +156,8 @@
 - `class NormalizePathTests`
   - Method `.test_plain_path_keeps_forward_slashes()`
   - Method `.test_quoted_path_is_unquoted()`
+  - Method `.test_quoted_non_ascii_path_is_decoded()`
+  - Method `.test_quoted_backslash_is_not_a_separator()`
 - `class CollectChurnTests`
   - Method `.test_passes_filters_and_reuses_parser()`
   - Method `.test_rejects_non_positive_commit_limit()`
@@ -162,7 +166,7 @@
 ---
 
 ### [`tests/test_integration_git.py`](tests/test_integration_git.py)
-**Size**: `78` lines (`2761` bytes)
+**Size**: `88` lines (`3170` bytes)
 
 **Classes:**
 - `class RealRepositoryTests`
@@ -171,6 +175,7 @@
   - Method `.test_collect_churn_reads_real_history()`
   - Method `.test_repo_root_resolves_subdirectory()`
   - Method `.test_rename_moves_churn_to_new_path()`
+  - Method `.test_non_ascii_path_is_decoded()`
 
 **Functions:**
 - `def _git(repo, *args)`

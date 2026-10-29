@@ -30,8 +30,8 @@ def _non_negative_float(raw: str) -> float:
         value = float(raw)
     except ValueError:
         raise argparse.ArgumentTypeError(f"expected a number, got {raw!r}") from None
-    if value < 0:
-        raise argparse.ArgumentTypeError("must be non-negative")
+    if not 0 <= value < float("inf"):
+        raise argparse.ArgumentTypeError("must be a finite non-negative number")
     return value
 
 

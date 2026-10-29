@@ -30,6 +30,7 @@ class RealRepositoryTests(unittest.TestCase):
         _git(self.repo, "config", "user.email", "test@example.com")
         _git(self.repo, "config", "user.name", "Driftwood Test")
         _git(self.repo, "config", "commit.gpgsign", "false")
+        _git(self.repo, "config", "core.quotePath", "true")
 
     def _commit(self, message):
         _git(self.repo, "add", "-A")
@@ -72,6 +73,15 @@ class RealRepositoryTests(unittest.TestCase):
         churn = collect_churn(self.repo, max_commits=1)
         self.assertIn("modern.py", churn)
         self.assertNotIn("legacy.py", churn)
+
+    def test_non_ascii_path_is_decoded(self):
+        module = self.repo / "src" / "café.py"
+        module.parent.mkdir(parents=True)
+        module.write_text("value = 1\n", encoding="utf-8")
+        self._commit("feat: add non-ascii module")
+
+        churn = collect_churn(self.repo, max_commits=1)
+        self.assertIn("src/café.py", churn)
 
 
 if __name__ == "__main__":

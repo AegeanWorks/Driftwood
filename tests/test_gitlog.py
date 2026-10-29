@@ -67,6 +67,12 @@ class NormalizePathTests(unittest.TestCase):
     def test_quoted_path_is_unquoted(self):
         self.assertEqual(normalize_path('"src/a b.py"'), "src/a b.py")
 
+    def test_quoted_non_ascii_path_is_decoded(self):
+        self.assertEqual(normalize_path('"src/caf\\303\\251.py"'), "src/café.py")
+
+    def test_quoted_backslash_is_not_a_separator(self):
+        self.assertEqual(normalize_path('"src\\\\mod.py"'), "src\\mod.py")
+
 
 class CollectChurnTests(unittest.TestCase):
     def test_passes_filters_and_reuses_parser(self):

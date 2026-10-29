@@ -47,6 +47,12 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual([item["path"] for item in payload["hotspots"]], ["src/app.py"])
 
+    def test_include_filter_keeps_matching_paths(self):
+        code, out, _ = self._run(["repo", "--format", "json", "--include", "src/*"])
+        payload = json.loads(out)
+        self.assertEqual(code, 0)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["src/app.py"])
+
     def test_git_error_returns_one_with_remediation(self):
         code, out, err = self._run(["repo"], error=GitError("Why: nope\nFix: retry"))
         self.assertEqual(code, 1)
@@ -68,7 +74,13 @@ class CliTests(unittest.TestCase):
         self.assertEqual([item["path"] for item in payload["hotspots"]], ["hot/a.py", "warm/b.py"])
 
     def test_invalid_numeric_flags_exit_two(self):
-        for argv in (["repo", "--top", "0"], ["repo", "--commits", "-3"], ["repo", "--min-score", "-1"]):
+        for argv in (
+            ["repo", "--top", "0"],
+            ["repo", "--commits", "-3"],
+            ["repo", "--min-score", "-1"],
+            ["repo", "--min-score", "nan"],
+            ["repo", "--min-score", "inf"],
+        ):
             with self.subTest(argv=argv), self.assertRaises(SystemExit) as ctx:
                 with contextlib.redirect_stderr(io.StringIO()):
                     cli.main(argv)

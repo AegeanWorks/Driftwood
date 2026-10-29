@@ -172,9 +172,10 @@ does not expressly grant. No ownership of any intellectual property passes to Yo
 Third-party components are not Covered Material. Their own licenses and notices govern, and this
 License grants no rights in them.
 
-Contributions to Licensor's repositories are accepted only under the **AegeanWorks Contributor
-License Agreement** (`licenses/CONTRIBUTING_CLA.md`), which lets Licensor license each
-contribution under this License, the Aegean Commercial License and any later terms.
+Contributions to Licensor's repositories are accepted only under the [AegeanWorks Contributor
+License Agreement](https://github.com/AegeanWorks/Aegean-Licensing/blob/master/licenses/CONTRIBUTING_CLA.md),
+which lets Licensor license each contribution under this License, the Aegean Commercial License
+and any later terms.
 
 ---
 
@@ -190,9 +191,10 @@ view or fork grants no other right.
 
 ## 9. Separate Commercial License
 
-A commercial or organizational license is effective only when granted under the Aegean
-Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by
-Licensor. Contacting Licensor, or receiving no reply, is not authorization.
+A commercial or organizational license is effective only when granted under the [Aegean
+Commercial License](https://github.com/AegeanWorks/Aegean-Licensing/blob/master/licenses/ACL-1.0.md)
+and evidenced by a License Grant Certificate issued by Licensor. Contacting Licensor, or
+receiving no reply, is not authorization.
 
 Inquiries & licensing: **`aegean-licensing@proton.me`**
 

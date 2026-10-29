@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import codecs
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -66,9 +67,21 @@ def _run_git(repo: Path, args: list[str]) -> str:
     return result.stdout
 
 
+def _unquote_path(raw: str) -> tuple[str, bool]:
+    """Decode git's C-style quoted path and say whether the input was quoted."""
+    text = raw.strip()
+    if len(text) < 2 or not (text.startswith('"') and text.endswith('"')):
+        return text, False
+    try:
+        decoded = codecs.escape_decode(text[1:-1].encode("utf-8"))[0].decode("utf-8")
+    except (UnicodeDecodeError, ValueError):
+        decoded = text[1:-1]
+    return decoded, True
+
+
 def normalize_path(raw: str) -> str:
     """Reduce git's rename notation to the newest path, using forward slashes."""
-    path = raw.strip().strip('"')
+    path, quoted = _unquote_path(raw)
     if " => " in path:
         prefix, _, suffix = path.partition(" => ")
         if "{" in prefix and "}" in suffix:
@@ -76,7 +89,7 @@ def normalize_path(raw: str) -> str:
             path = prefix.split("{", 1)[0] + head + tail
         else:
             path = suffix
-    return path.replace("\\", "/")
+    return path if quoted else path.replace("\\", "/")
 
 
 def parse_numstat(text: str) -> dict[str, FileChurn]:

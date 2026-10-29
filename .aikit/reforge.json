@@ -1,0 +1,931 @@
+{
+  "schema": 2,
+  "next_run_id": 2,
+  "active_run": null,
+  "last_run": "run-1",
+  "runs": [
+    {
+      "id": "run-1",
+      "start": 3,
+      "step": 3,
+      "stop": null,
+      "stage": 2,
+      "window": 4,
+      "audited_commits": [
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+      ],
+      "status": "stopped",
+      "created": "2026-10-29T19:23:50",
+      "updated": "2026-10-29T19:30:39",
+      "last_audit": {
+        "run": "run-1",
+        "stage": 2,
+        "window": 4,
+        "commits": [
+          "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+          "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+          "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+        ],
+        "new_commits": [
+          "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+        ],
+        "prior_commits": [
+          "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+          "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+          "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+        ],
+        "findings": [
+          {
+            "code": "review-missing-license-references",
+            "category": "review",
+            "severity": "low",
+            "path": "LICENSE",
+            "line": 194,
+            "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+            "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+            "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+            "hunk": "6b28af10e6bd:LICENSE#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          }
+        ],
+        "repairs": [],
+        "counts": {
+          "review": 1
+        },
+        "reviewed": 9,
+        "review": {
+          "status": "reviewed",
+          "rejected": [],
+          "files": [
+            ".aikit/decisions.md",
+            ".aikit/guidelines.md",
+            ".aikit/project.json",
+            ".gitignore",
+            "COMMERCIAL.md",
+            "LICENSE",
+            "LICENSES/LicenseRef-AL-1.1.txt",
+            "README.md",
+            "REUSE.toml"
+          ],
+          "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-2-6b28af10e6bd.md",
+          "redacted": 0,
+          "reason": "",
+          "coverage": {
+            "reported": 9,
+            "total": 9,
+            "missing": [],
+            "unknown": []
+          },
+          "findings": [
+            {
+              "code": "review-missing-license-references",
+              "category": "review",
+              "severity": "low",
+              "path": "LICENSE",
+              "line": 194,
+              "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+              "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+              "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+              "hunk": "6b28af10e6bd:LICENSE#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            }
+          ]
+        },
+        "skipped": [],
+        "tests": {},
+        "gates": {},
+        "timestamp": "2026-10-29T19:29:21"
+      },
+      "history": [
+        {
+          "run": "run-1",
+          "stage": 1,
+          "window": 3,
+          "commits": [
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+          ],
+          "new_commits": [
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+          ],
+          "prior_commits": [],
+          "findings": [
+            {
+              "code": "review-git-quoted-path-escapes",
+              "category": "review",
+              "severity": "medium",
+              "path": "driftwood/gitlog.py",
+              "line": 71,
+              "message": "normalize_path strips the surrounding quotes but never decodes the C-style octal escapes inside git's quoted path, so a tracked src/caf\u00e9.py is reported as src/caf/303/251.py. The mangled path no longer matches the work tree, so complexity_map silently assigns complexity 0 and the report names a file that does not exist. Git quotes every non-ASCII path by default (core.quotePath=true), so any repos",
+              "evidence": "path = raw.strip().strip('\"')",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            },
+            {
+              "code": "review-non-finite-min-score",
+              "category": "review",
+              "severity": "low",
+              "path": "driftwood/cli.py",
+              "line": 33,
+              "message": "--min-score accepts nan and inf because the validator only rejects values below zero. nan makes every item.score >= args.min_score comparison false, so the command silently prints an empty report; inf hides every row. The README promises invalid numeric flags exit 2, so reject non-finite input here.",
+              "evidence": "if value < 0:",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:driftwood/cli.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": true,
+              "source": "review",
+              "patch_old": "    if value < 0:\n        raise argparse.ArgumentTypeError(\"must be non-negative\")",
+              "patch_new": "    if not 0 <= value < float(\"inf\"):\n        raise argparse.ArgumentTypeError(\"must be a finite non-negative number\")"
+            },
+            {
+              "code": "review-non-finite-min-score-test",
+              "category": "improvement",
+              "severity": "low",
+              "path": "tests/test_cli.py",
+              "line": 71,
+              "message": "Extend the numeric-flag regression test with the non-finite inputs; otherwise the new nan/inf rejection has no test and can silently regress.",
+              "evidence": "for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": true,
+              "interaction": "",
+              "repaired": true,
+              "source": "review",
+              "patch_old": "        for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+              "patch_new": "        for argv in (\n            [\"repo\", \"--top\", \"0\"],\n            [\"repo\", \"--commits\", \"-3\"],\n            [\"repo\", \"--min-score\", \"-1\"],\n            [\"repo\", \"--min-score\", \"nan\"],\n            [\"repo\", \"--min-score\", \"inf\"],\n        ):"
+            },
+            {
+              "code": "review-missing-include-filter-test",
+              "category": "improvement",
+              "severity": "low",
+              "path": "tests/test_cli.py",
+              "line": 44,
+              "message": "Only --exclude is exercised; the documented --include branch in _matches has no test, so an inverted include filter would still pass the suite. Add a case that asks for --include src/* and expects only src/app.py.",
+              "evidence": "def test_exclude_filter_drops_paths(self):",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            }
+          ],
+          "repairs": [
+            {
+              "code": "review-non-finite-min-score",
+              "path": "driftwood/cli.py",
+              "line": 33,
+              "summary": "applied review suggestion: --min-score accepts nan and inf because the validator only rejects values below ",
+              "test_name": "",
+              "applied": true
+            },
+            {
+              "code": "review-non-finite-min-score-test",
+              "path": "tests/test_cli.py",
+              "line": 71,
+              "summary": "applied review suggestion: Extend the numeric-flag regression test with the non-finite inputs; otherwise th",
+              "test_name": "",
+              "applied": true
+            }
+          ],
+          "counts": {
+            "review": 2,
+            "improvement": 2
+          },
+          "reviewed": 22,
+          "review": {
+            "status": "reviewed",
+            "rejected": [],
+            "files": [
+              ".aikit/codebase_map.md",
+              ".aikit/decisions.md",
+              ".aikit/media.json",
+              ".aikit/project.json",
+              "README.md",
+              "assets/logo.svg",
+              "assets/social-preview.svg",
+              "driftwood/__init__.py",
+              "driftwood/__main__.py",
+              "driftwood/cli.py",
+              "driftwood/complexity.py",
+              "driftwood/gitlog.py",
+              "driftwood/report.py",
+              "driftwood/scoring.py",
+              "pyproject.toml",
+              "tests/__init__.py",
+              "tests/test_cli.py",
+              "tests/test_complexity.py",
+              "tests/test_gitlog.py",
+              "tests/test_integration_git.py",
+              "tests/test_report.py",
+              "tests/test_scoring.py"
+            ],
+            "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-1-b8835f94c97d.md",
+            "redacted": 0,
+            "reason": "",
+            "coverage": {
+              "reported": 24,
+              "total": 24,
+              "missing": [],
+              "unknown": []
+            },
+            "findings": [
+              {
+                "code": "review-git-quoted-path-escapes",
+                "category": "review",
+                "severity": "medium",
+                "path": "driftwood/gitlog.py",
+                "line": 71,
+                "message": "normalize_path strips the surrounding quotes but never decodes the C-style octal escapes inside git's quoted path, so a tracked src/caf\u00e9.py is reported as src/caf/303/251.py. The mangled path no longer matches the work tree, so complexity_map silently assigns complexity 0 and the report names a file that does not exist. Git quotes every non-ASCII path by default (core.quotePath=true), so any repos",
+                "evidence": "path = raw.strip().strip('\"')",
+                "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+                "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": false,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "",
+                "patch_new": ""
+              },
+              {
+                "code": "review-non-finite-min-score",
+                "category": "review",
+                "severity": "low",
+                "path": "driftwood/cli.py",
+                "line": 33,
+                "message": "--min-score accepts nan and inf because the validator only rejects values below zero. nan makes every item.score >= args.min_score comparison false, so the command silently prints an empty report; inf hides every row. The README promises invalid numeric flags exit 2, so reject non-finite input here.",
+                "evidence": "if value < 0:",
+                "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+                "hunk": "6987adbdb4c6:driftwood/cli.py#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": true,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "    if value < 0:\n        raise argparse.ArgumentTypeError(\"must be non-negative\")",
+                "patch_new": "    if not 0 <= value < float(\"inf\"):\n        raise argparse.ArgumentTypeError(\"must be a finite non-negative number\")"
+              },
+              {
+                "code": "review-non-finite-min-score-test",
+                "category": "improvement",
+                "severity": "low",
+                "path": "tests/test_cli.py",
+                "line": 71,
+                "message": "Extend the numeric-flag regression test with the non-finite inputs; otherwise the new nan/inf rejection has no test and can silently regress.",
+                "evidence": "for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+                "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+                "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": true,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "        for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+                "patch_new": "        for argv in (\n            [\"repo\", \"--top\", \"0\"],\n            [\"repo\", \"--commits\", \"-3\"],\n            [\"repo\", \"--min-score\", \"-1\"],\n            [\"repo\", \"--min-score\", \"nan\"],\n            [\"repo\", \"--min-score\", \"inf\"],\n        ):"
+              },
+              {
+                "code": "review-missing-include-filter-test",
+                "category": "improvement",
+                "severity": "low",
+                "path": "tests/test_cli.py",
+                "line": 44,
+                "message": "Only --exclude is exercised; the documented --include branch in _matches has no test, so an inverted include filter would still pass the suite. Add a case that asks for --include src/* and expects only src/app.py.",
+                "evidence": "def test_exclude_filter_drops_paths(self):",
+                "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+                "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": false,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "",
+                "patch_new": ""
+              }
+            ]
+          },
+          "skipped": [],
+          "tests": {
+            "command": "C:\\Python314\\python.exe -m unittest discover tests",
+            "code": 0,
+            "passed": true,
+            "output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 2.341s\n\nOK",
+            "tail": [
+              ".....................................",
+              "----------------------------------------------------------------------",
+              "Ran 37 tests in 2.341s",
+              "OK"
+            ]
+          },
+          "gates": {},
+          "timestamp": "2026-10-29T19:23:58"
+        },
+        {
+          "run": "run-1",
+          "stage": 2,
+          "window": 4,
+          "commits": [
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+          ],
+          "new_commits": [
+            "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+          ],
+          "prior_commits": [
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+          ],
+          "findings": [
+            {
+              "code": "review-missing-license-references",
+              "category": "review",
+              "severity": "low",
+              "path": "LICENSE",
+              "line": 194,
+              "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+              "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+              "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+              "hunk": "6b28af10e6bd:LICENSE#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            }
+          ],
+          "repairs": [],
+          "counts": {
+            "review": 1
+          },
+          "reviewed": 9,
+          "review": {
+            "status": "reviewed",
+            "rejected": [],
+            "files": [
+              ".aikit/decisions.md",
+              ".aikit/guidelines.md",
+              ".aikit/project.json",
+              ".gitignore",
+              "COMMERCIAL.md",
+              "LICENSE",
+              "LICENSES/LicenseRef-AL-1.1.txt",
+              "README.md",
+              "REUSE.toml"
+            ],
+            "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-2-6b28af10e6bd.md",
+            "redacted": 0,
+            "reason": "",
+            "coverage": {
+              "reported": 9,
+              "total": 9,
+              "missing": [],
+              "unknown": []
+            },
+            "findings": [
+              {
+                "code": "review-missing-license-references",
+                "category": "review",
+                "severity": "low",
+                "path": "LICENSE",
+                "line": 194,
+                "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+                "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+                "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+                "hunk": "6b28af10e6bd:LICENSE#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": false,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "",
+                "patch_new": ""
+              }
+            ]
+          },
+          "skipped": [],
+          "tests": {},
+          "gates": {},
+          "timestamp": "2026-10-29T19:29:21"
+        }
+      ]
+    }
+  ],
+  "stage": 2,
+  "window": 4,
+  "audited_commits": [
+    "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+    "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+    "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+    "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+  ],
+  "last_audit": {
+    "run": "run-1",
+    "stage": 2,
+    "window": 4,
+    "commits": [
+      "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+      "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+      "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+    ],
+    "new_commits": [
+      "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+    ],
+    "prior_commits": [
+      "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+      "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+    ],
+    "findings": [
+      {
+        "code": "review-missing-license-references",
+        "category": "review",
+        "severity": "low",
+        "path": "LICENSE",
+        "line": 194,
+        "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+        "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+        "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+        "hunk": "6b28af10e6bd:LICENSE#1",
+        "symbol": "",
+        "introduced": true,
+        "reproducible": false,
+        "fixable": false,
+        "interaction": "",
+        "repaired": false,
+        "source": "review",
+        "patch_old": "",
+        "patch_new": ""
+      }
+    ],
+    "repairs": [],
+    "counts": {
+      "review": 1
+    },
+    "reviewed": 9,
+    "review": {
+      "status": "reviewed",
+      "rejected": [],
+      "files": [
+        ".aikit/decisions.md",
+        ".aikit/guidelines.md",
+        ".aikit/project.json",
+        ".gitignore",
+        "COMMERCIAL.md",
+        "LICENSE",
+        "LICENSES/LicenseRef-AL-1.1.txt",
+        "README.md",
+        "REUSE.toml"
+      ],
+      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-2-6b28af10e6bd.md",
+      "redacted": 0,
+      "reason": "",
+      "coverage": {
+        "reported": 9,
+        "total": 9,
+        "missing": [],
+        "unknown": []
+      },
+      "findings": [
+        {
+          "code": "review-missing-license-references",
+          "category": "review",
+          "severity": "low",
+          "path": "LICENSE",
+          "line": 194,
+          "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+          "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+          "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+          "hunk": "6b28af10e6bd:LICENSE#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        }
+      ]
+    },
+    "skipped": [],
+    "tests": {},
+    "gates": {},
+    "timestamp": "2026-10-29T19:29:21"
+  },
+  "history": [
+    {
+      "run": "run-1",
+      "stage": 1,
+      "window": 3,
+      "commits": [
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+      ],
+      "new_commits": [
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+      ],
+      "prior_commits": [],
+      "findings": [
+        {
+          "code": "review-git-quoted-path-escapes",
+          "category": "review",
+          "severity": "medium",
+          "path": "driftwood/gitlog.py",
+          "line": 71,
+          "message": "normalize_path strips the surrounding quotes but never decodes the C-style octal escapes inside git's quoted path, so a tracked src/caf\u00e9.py is reported as src/caf/303/251.py. The mangled path no longer matches the work tree, so complexity_map silently assigns complexity 0 and the report names a file that does not exist. Git quotes every non-ASCII path by default (core.quotePath=true), so any repos",
+          "evidence": "path = raw.strip().strip('\"')",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        },
+        {
+          "code": "review-non-finite-min-score",
+          "category": "review",
+          "severity": "low",
+          "path": "driftwood/cli.py",
+          "line": 33,
+          "message": "--min-score accepts nan and inf because the validator only rejects values below zero. nan makes every item.score >= args.min_score comparison false, so the command silently prints an empty report; inf hides every row. The README promises invalid numeric flags exit 2, so reject non-finite input here.",
+          "evidence": "if value < 0:",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:driftwood/cli.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": true,
+          "source": "review",
+          "patch_old": "    if value < 0:\n        raise argparse.ArgumentTypeError(\"must be non-negative\")",
+          "patch_new": "    if not 0 <= value < float(\"inf\"):\n        raise argparse.ArgumentTypeError(\"must be a finite non-negative number\")"
+        },
+        {
+          "code": "review-non-finite-min-score-test",
+          "category": "improvement",
+          "severity": "low",
+          "path": "tests/test_cli.py",
+          "line": 71,
+          "message": "Extend the numeric-flag regression test with the non-finite inputs; otherwise the new nan/inf rejection has no test and can silently regress.",
+          "evidence": "for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": true,
+          "interaction": "",
+          "repaired": true,
+          "source": "review",
+          "patch_old": "        for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+          "patch_new": "        for argv in (\n            [\"repo\", \"--top\", \"0\"],\n            [\"repo\", \"--commits\", \"-3\"],\n            [\"repo\", \"--min-score\", \"-1\"],\n            [\"repo\", \"--min-score\", \"nan\"],\n            [\"repo\", \"--min-score\", \"inf\"],\n        ):"
+        },
+        {
+          "code": "review-missing-include-filter-test",
+          "category": "improvement",
+          "severity": "low",
+          "path": "tests/test_cli.py",
+          "line": 44,
+          "message": "Only --exclude is exercised; the documented --include branch in _matches has no test, so an inverted include filter would still pass the suite. Add a case that asks for --include src/* and expects only src/app.py.",
+          "evidence": "def test_exclude_filter_drops_paths(self):",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        }
+      ],
+      "repairs": [
+        {
+          "code": "review-non-finite-min-score",
+          "path": "driftwood/cli.py",
+          "line": 33,
+          "summary": "applied review suggestion: --min-score accepts nan and inf because the validator only rejects values below ",
+          "test_name": "",
+          "applied": true
+        },
+        {
+          "code": "review-non-finite-min-score-test",
+          "path": "tests/test_cli.py",
+          "line": 71,
+          "summary": "applied review suggestion: Extend the numeric-flag regression test with the non-finite inputs; otherwise th",
+          "test_name": "",
+          "applied": true
+        }
+      ],
+      "counts": {
+        "review": 2,
+        "improvement": 2
+      },
+      "reviewed": 22,
+      "review": {
+        "status": "reviewed",
+        "rejected": [],
+        "files": [
+          ".aikit/codebase_map.md",
+          ".aikit/decisions.md",
+          ".aikit/media.json",
+          ".aikit/project.json",
+          "README.md",
+          "assets/logo.svg",
+          "assets/social-preview.svg",
+          "driftwood/__init__.py",
+          "driftwood/__main__.py",
+          "driftwood/cli.py",
+          "driftwood/complexity.py",
+          "driftwood/gitlog.py",
+          "driftwood/report.py",
+          "driftwood/scoring.py",
+          "pyproject.toml",
+          "tests/__init__.py",
+          "tests/test_cli.py",
+          "tests/test_complexity.py",
+          "tests/test_gitlog.py",
+          "tests/test_integration_git.py",
+          "tests/test_report.py",
+          "tests/test_scoring.py"
+        ],
+        "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-1-b8835f94c97d.md",
+        "redacted": 0,
+        "reason": "",
+        "coverage": {
+          "reported": 24,
+          "total": 24,
+          "missing": [],
+          "unknown": []
+        },
+        "findings": [
+          {
+            "code": "review-git-quoted-path-escapes",
+            "category": "review",
+            "severity": "medium",
+            "path": "driftwood/gitlog.py",
+            "line": 71,
+            "message": "normalize_path strips the surrounding quotes but never decodes the C-style octal escapes inside git's quoted path, so a tracked src/caf\u00e9.py is reported as src/caf/303/251.py. The mangled path no longer matches the work tree, so complexity_map silently assigns complexity 0 and the report names a file that does not exist. Git quotes every non-ASCII path by default (core.quotePath=true), so any repos",
+            "evidence": "path = raw.strip().strip('\"')",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          },
+          {
+            "code": "review-non-finite-min-score",
+            "category": "review",
+            "severity": "low",
+            "path": "driftwood/cli.py",
+            "line": 33,
+            "message": "--min-score accepts nan and inf because the validator only rejects values below zero. nan makes every item.score >= args.min_score comparison false, so the command silently prints an empty report; inf hides every row. The README promises invalid numeric flags exit 2, so reject non-finite input here.",
+            "evidence": "if value < 0:",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:driftwood/cli.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "    if value < 0:\n        raise argparse.ArgumentTypeError(\"must be non-negative\")",
+            "patch_new": "    if not 0 <= value < float(\"inf\"):\n        raise argparse.ArgumentTypeError(\"must be a finite non-negative number\")"
+          },
+          {
+            "code": "review-non-finite-min-score-test",
+            "category": "improvement",
+            "severity": "low",
+            "path": "tests/test_cli.py",
+            "line": 71,
+            "message": "Extend the numeric-flag regression test with the non-finite inputs; otherwise the new nan/inf rejection has no test and can silently regress.",
+            "evidence": "for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": true,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "        for argv in ([\"repo\", \"--top\", \"0\"], [\"repo\", \"--commits\", \"-3\"], [\"repo\", \"--min-score\", \"-1\"]):",
+            "patch_new": "        for argv in (\n            [\"repo\", \"--top\", \"0\"],\n            [\"repo\", \"--commits\", \"-3\"],\n            [\"repo\", \"--min-score\", \"-1\"],\n            [\"repo\", \"--min-score\", \"nan\"],\n            [\"repo\", \"--min-score\", \"inf\"],\n        ):"
+          },
+          {
+            "code": "review-missing-include-filter-test",
+            "category": "improvement",
+            "severity": "low",
+            "path": "tests/test_cli.py",
+            "line": 44,
+            "message": "Only --exclude is exercised; the documented --include branch in _matches has no test, so an inverted include filter would still pass the suite. Add a case that asks for --include src/* and expects only src/app.py.",
+            "evidence": "def test_exclude_filter_drops_paths(self):",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:tests/test_cli.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          }
+        ]
+      },
+      "skipped": [],
+      "tests": {
+        "command": "C:\\Python314\\python.exe -m unittest discover tests",
+        "code": 0,
+        "passed": true,
+        "output": ".....................................\n----------------------------------------------------------------------\nRan 37 tests in 2.341s\n\nOK",
+        "tail": [
+          ".....................................",
+          "----------------------------------------------------------------------",
+          "Ran 37 tests in 2.341s",
+          "OK"
+        ]
+      },
+      "gates": {},
+      "timestamp": "2026-10-29T19:23:58"
+    },
+    {
+      "run": "run-1",
+      "stage": 2,
+      "window": 4,
+      "commits": [
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+      ],
+      "new_commits": [
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+      ],
+      "prior_commits": [
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+      ],
+      "findings": [
+        {
+          "code": "review-missing-license-references",
+          "category": "review",
+          "severity": "low",
+          "path": "LICENSE",
+          "line": 194,
+          "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+          "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+          "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+          "hunk": "6b28af10e6bd:LICENSE#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        }
+      ],
+      "repairs": [],
+      "counts": {
+        "review": 1
+      },
+      "reviewed": 9,
+      "review": {
+        "status": "reviewed",
+        "rejected": [],
+        "files": [
+          ".aikit/decisions.md",
+          ".aikit/guidelines.md",
+          ".aikit/project.json",
+          ".gitignore",
+          "COMMERCIAL.md",
+          "LICENSE",
+          "LICENSES/LicenseRef-AL-1.1.txt",
+          "README.md",
+          "REUSE.toml"
+        ],
+        "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-1-2-6b28af10e6bd.md",
+        "redacted": 0,
+        "reason": "",
+        "coverage": {
+          "reported": 9,
+          "total": 9,
+          "missing": [],
+          "unknown": []
+        },
+        "findings": [
+          {
+            "code": "review-missing-license-references",
+            "category": "review",
+            "severity": "low",
+            "path": "LICENSE",
+            "line": 194,
+            "message": "This section points contributors and commercial users at licenses/CONTRIBUTING_CLA.md and licenses/ACL-1.0.md, but the repository ships neither path; its only license text is LICENSES/LicenseRef-AL-1.1.txt. Both references are broken, so a contributor cannot find the CLA the license requires. Add the two texts or point readers to COMMERCIAL.md.",
+            "evidence": "Commercial License (`licenses/ACL-1.0.md`) and evidenced by a License Grant Certificate issued by",
+            "commit": "6b28af10e6bd122127189847c451e0a8cc0e23b9",
+            "hunk": "6b28af10e6bd:LICENSE#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          }
+        ]
+      },
+      "skipped": [],
+      "tests": {},
+      "gates": {},
+      "timestamp": "2026-10-29T19:29:21"
+    }
+  ]
+}

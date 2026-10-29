@@ -17,8 +17,10 @@
   "ui_required": false,
   "created": "2026-10-28",
   "has_ui": false,
-  "ui_kind": "library",
-  "ui_evidence": [],
-  "ui_checked_at": "2026-10-28",
+  "ui_kind": "cli",
+  "ui_evidence": [
+    "driftwood/cli.py"
+  ],
+  "ui_checked_at": "2026-10-29",
   "ui_source": "detected"
 }
