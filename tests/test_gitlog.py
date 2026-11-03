@@ -59,6 +59,17 @@ class ParseNumstatTests(unittest.TestCase):
     def test_empty_input_is_empty_mapping(self):
         self.assertEqual(parse_numstat(""), {})
 
+    def test_non_numeric_counts_are_skipped(self):
+        text = "\n".join(
+            [
+                f"{COMMIT_MARKER}aaa",
+                "abc\tdef\tsrc/app.py",
+                "3\t1\tsrc/ok.py",
+            ]
+        )
+        result = parse_numstat(text)
+        self.assertEqual(list(result), ["src/ok.py"])
+
 
 class NormalizePathTests(unittest.TestCase):
     def test_plain_path_keeps_forward_slashes(self):

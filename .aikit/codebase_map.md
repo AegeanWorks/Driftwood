@@ -9,8 +9,8 @@
 - **Total Python Modules**: `14`
 - **Total Classes**: `15`
 - **Total Top-Level Functions**: `24`
-- **Total Class Methods**: `46`
-- **Total Source Lines**: `948`
+- **Total Class Methods**: `48`
+- **Total Source Lines**: `969`
 
 ---
 
@@ -31,7 +31,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `102` lines (`3391` bytes)
+**Size**: `104` lines (`3413` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -59,7 +59,7 @@
 ### [`driftwood/gitlog.py`](driftwood/gitlog.py)
 > *Read per-file churn from a local git repository without third-party tools.*
 
-**Size**: `138` lines (`4548` bytes)
+**Size**: `142` lines (`4669` bytes)
 
 **Classes:**
 - `class GitError` - *A git invocation failed; the message carries Why and Fix guidance.*
@@ -109,7 +109,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `91` lines (`3424` bytes)
+**Size**: `95` lines (`3612` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -120,6 +120,7 @@
   - Method `.test_include_filter_keeps_matching_paths()`
   - Method `.test_git_error_returns_one_with_remediation()`
   - Method `.test_min_score_filters_before_top_slices()`
+  - Method `.test_include_match_is_case_sensitive()`
   - Method `.test_invalid_numeric_flags_exit_two()`
 
 **Functions:**
@@ -145,7 +146,7 @@
 ---
 
 ### [`tests/test_gitlog.py`](tests/test_gitlog.py)
-**Size**: `104` lines (`3205` bytes)
+**Size**: `115` lines (`3526` bytes)
 
 **Classes:**
 - `class ParseNumstatTests`
@@ -153,6 +154,7 @@
   - Method `.test_ignores_binary_and_malformed_lines()`
   - Method `.test_renamed_paths_resolve_to_new_location()`
   - Method `.test_empty_input_is_empty_mapping()`
+  - Method `.test_non_numeric_counts_are_skipped()`
 - `class NormalizePathTests`
   - Method `.test_plain_path_keeps_forward_slashes()`
   - Method `.test_quoted_path_is_unquoted()`

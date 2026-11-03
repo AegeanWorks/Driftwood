@@ -68,9 +68,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _matches(path: str, include: Sequence[str], exclude: Sequence[str]) -> bool:
-    if include and not any(fnmatch.fnmatch(path, pattern) for pattern in include):
+    if include and not any(
+        fnmatch.fnmatchcase(path, pattern) for pattern in include
+    ):
         return False
-    return not any(fnmatch.fnmatch(path, pattern) for pattern in exclude)
+    return not any(fnmatch.fnmatchcase(path, pattern) for pattern in exclude)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

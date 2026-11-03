@@ -73,6 +73,10 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual([item["path"] for item in payload["hotspots"]], ["hot/a.py", "warm/b.py"])
 
+    def test_include_match_is_case_sensitive(self):
+        self.assertTrue(cli._matches("src/app.py", ["src/*"], []))
+        self.assertFalse(cli._matches("SRC/app.py", ["src/*"], []))
+
     def test_invalid_numeric_flags_exit_two(self):
         for argv in (
             ["repo", "--top", "0"],

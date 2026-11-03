@@ -107,11 +107,15 @@ def parse_numstat(text: str) -> dict[str, FileChurn]:
         added, deleted, raw_path = parts[_ADDED], parts[_DELETED], parts[_PATH]
         if added == "-" or deleted == "-":
             continue
+        try:
+            added_int, deleted_int = int(added), int(deleted)
+        except ValueError:
+            continue
         path = normalize_path(raw_path)
         if not path:
             continue
         current = churn.get(path, FileChurn())
-        churn[path] = current.with_change(int(added), int(deleted))
+        churn[path] = current.with_change(added_int, deleted_int)
     return churn
 
 
