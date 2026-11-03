@@ -46,6 +46,9 @@ class GenericComplexityTests(unittest.TestCase):
     def test_comment_and_blank_lines_are_skipped(self):
         self.assertEqual(generic_complexity("# if\n\n"), 1)
 
+    def test_case_paren_counted(self):
+        self.assertEqual(generic_complexity("case(x):\n"), 2)
+
 
 class FileComplexityTests(unittest.TestCase):
     def test_dispatches_python_and_generic_files(self):

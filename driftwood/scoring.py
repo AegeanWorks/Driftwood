@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Mapping
 
@@ -51,12 +52,19 @@ def rank_hotspots(
     """Return hotspots ordered by score, highest first.
 
     Files with neither churn nor complexity are dropped; a tie breaks on path so
-    repeated runs stay deterministic.
+    repeated runs stay deterministic. Scores are rounded to 4 decimals before
+    sorting, so raw differences below 5e-05 collapse to path order. Dropped iff
+    ``score <= 0 and churn <= 0 and complexity <= 0``; with default weights this
+    equals zero-signal drop, with zero weights churn-positive rows are retained.
     """
-    if churn_weight < 0 or complexity_weight < 0:
-        raise ValueError("weights must be non-negative")
-    if top is not None and top < 1:
-        raise ValueError("top must be a positive integer")
+    for name, weight in (("churn_weight", churn_weight), ("complexity_weight", complexity_weight)):
+        if isinstance(weight, bool) or not isinstance(weight, (int, float)):
+            raise ValueError(f"{name} must be a finite number")
+        if not math.isfinite(float(weight)) or float(weight) < 0:
+            raise ValueError(f"{name} must be a finite non-negative number")
+    if top is not None:
+        if isinstance(top, bool) or not isinstance(top, int) or top < 1:
+            raise ValueError("top must be a positive integer")
     if not churn:
         return []
 

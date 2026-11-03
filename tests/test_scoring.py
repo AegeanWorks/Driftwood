@@ -55,6 +55,32 @@ class RankHotspotsTests(unittest.TestCase):
             rank_hotspots({"a": _churn(1)}, {}, churn_weight=-1)
         with self.assertRaises(ValueError):
             rank_hotspots({"a": _churn(1)}, {}, top=0)
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {}, complexity_weight=-0.1)
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {}, top=-1)
+
+    def test_nan_inf_weights_rejected(self):
+        import math
+
+        for bad in (float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                rank_hotspots({"a": _churn(1), "b": _churn(2)}, {}, churn_weight=bad)
+            with self.assertRaises(ValueError):
+                rank_hotspots({"a": _churn(1), "b": _churn(2)}, {}, complexity_weight=bad)
+
+    def test_non_int_top_rejected(self):
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {}, top="2")
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {}, top=2.5)
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {}, top=True)
+
+    def test_zero_weights_yield_zero_scored_but_retained(self):
+        ranked = rank_hotspots({"a": _churn(10)}, {}, churn_weight=0, complexity_weight=0)
+        self.assertEqual(len(ranked), 1)
+        self.assertEqual(ranked[0].score, 0.0)
 
 
 if __name__ == "__main__":

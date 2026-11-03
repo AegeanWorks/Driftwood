@@ -31,6 +31,7 @@ GENERIC_MARKERS = (
     "while(",
     "while (",
     " case ",
+    "case(",
     "catch",
     "switch",
     "&&",
@@ -47,7 +48,7 @@ def python_complexity(source: str) -> int:
         for token in tokenize.generate_tokens(io.StringIO(source).readline):
             if token.type == tokenize.NAME and token.string in DECISION_KEYWORDS:
                 total += 1
-    except (tokenize.TokenError, IndentationError, SyntaxError):
+    except (tokenize.TokenError, SyntaxError):
         return 1 + sum(
             1 for line in source.splitlines() if _line_has_decision(line)
         )

@@ -52,16 +52,24 @@ def build_parser() -> argparse.ArgumentParser:
         "--format", choices=("table", "json"), default="table", help="output format"
     )
     parser.add_argument(
-        "--include", action="append", default=[], metavar="GLOB", help="keep matching paths"
+        "--include",
+        action="append",
+        default=None,
+        metavar="GLOB",
+        help="keep matching paths (repeatable, case-sensitive, * spans /; empty keeps all)",
     )
     parser.add_argument(
-        "--exclude", action="append", default=[], metavar="GLOB", help="drop matching paths"
+        "--exclude",
+        action="append",
+        default=None,
+        metavar="GLOB",
+        help="drop matching paths (repeatable, case-sensitive; exclude wins)",
     )
     parser.add_argument(
         "--min-score",
         type=_non_negative_float,
         default=0.0,
-        help="hide rows below this score",
+        help="hide rows below this score (applied before --top)",
     )
     parser.add_argument("--version", action="version", version=f"driftwood {__version__}")
     return parser
@@ -80,23 +88,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        root = repo_root(Path(args.repo))
+        repo_path = Path(args.repo)
+        if repo_path.is_file():
+            repo_path = repo_path.parent
+        root = repo_root(repo_path)
         churn = collect_churn(root, since=args.since, max_commits=args.commits)
     except GitError as exc:
         print(f"driftwood: {exc}", file=sys.stderr)
         return 1
 
+    include = args.include or []
+    exclude = args.exclude or []
     selected = {
         path: stat
         for path, stat in churn.items()
-        if _matches(path, args.include, args.exclude)
+        if _matches(path, include, exclude)
     }
     complexity = complexity_map(root, sorted(selected))
     ranked = rank_hotspots(selected, complexity)
     shown = [item for item in ranked if item.score >= args.min_score][: args.top]
 
     renderer = format_json if args.format == "json" else format_table
-    print(renderer(shown))
+    try:
+        print(renderer(shown))
+    except BrokenPipeError:
+        # hygiene: allow silent broken-pipe exit for `| head` usability
+        try:
+            sys.stdout.close()
+        except OSError:  # hygiene: allow close may fail on dead pipe
+            pass
+        return 0
     return 0
 
 

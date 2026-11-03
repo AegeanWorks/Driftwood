@@ -90,6 +90,64 @@ class CliTests(unittest.TestCase):
                     cli.main(argv)
             self.assertEqual(ctx.exception.code, 2)
 
+    def test_parser_defaults_are_fresh(self):
+        parser = cli.build_parser()
+        first = parser.parse_args(["--include", "x"])
+        second = parser.parse_args([])
+        self.assertEqual(first.include, ["x"])
+        self.assertEqual(second.include, None)
+        self.assertEqual(second.exclude, None)
+        third = parser.parse_args(["--include", "y"])
+        self.assertEqual(third.include, ["y"])
+
+    def test_empty_churn_table_returns_zero_with_guidance(self):
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", return_value={}):
+                    code, out, _ = self._run(["repo"], churn={})
+                    # _run mocks collect_churn with default churn; call directly for empty
+        output = io.StringIO()
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", return_value={}):
+                    with contextlib.redirect_stdout(output):
+                        code = cli.main(["repo"])
+        self.assertEqual(code, 0)
+        self.assertIn("No hotspots found", output.getvalue())
+
+    def test_repo_root_git_error_returns_one(self):
+        code, out, err = self._run(["repo"], error=GitError("Why: bad\nFix: check"))
+        self.assertEqual(code, 1)
+        with mock.patch.object(cli, "repo_root", side_effect=GitError("Why: bad\nFix: check")):
+            output = io.StringIO()
+            errors = io.StringIO()
+            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+                code = cli.main(["repo"])
+            self.assertEqual(code, 1)
+            self.assertIn("Why: bad", errors.getvalue())
+
+    def test_file_arg_uses_parent_dir(self):
+        seen = {}
+
+        def fake_root(repo):
+            seen["repo"] = repo
+            return Path(".")
+
+        with mock.patch.object(cli, "repo_root", side_effect=fake_root):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", return_value={}):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        cli.main([__file__])
+        self.assertEqual(seen["repo"], Path(__file__).parent)
+
+    def test_broken_pipe_does_not_raise(self):
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value=_churn()):
+                with mock.patch.object(cli, "complexity_map", return_value={"a": 1}):
+                    with mock.patch("builtins.print", side_effect=BrokenPipeError(32, "Broken pipe")):
+                        code = cli.main(["repo"])
+        self.assertEqual(code, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

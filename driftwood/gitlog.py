@@ -51,6 +51,11 @@ def _run_git(repo: Path, args: list[str]) -> str:
             "Why: git is not installed or not on PATH.\n"
             "Fix: install git and reopen the terminal, then retry."
         ) from exc
+    except OSError as exc:
+        raise GitError(
+            f"Why: could not launch git ({exc}).\n"
+            "Fix: check that git is installed and the repository is accessible."
+        ) from exc
     except subprocess.TimeoutExpired as exc:
         raise GitError(
             "Why: git did not answer within 60 seconds.\n"
@@ -74,7 +79,7 @@ def _unquote_path(raw: str) -> tuple[str, bool]:
         return text, False
     try:
         decoded = codecs.escape_decode(text[1:-1].encode("utf-8"))[0].decode("utf-8")
-    except (UnicodeDecodeError, ValueError):
+    except ValueError:
         decoded = text[1:-1]
     return decoded, True
 
@@ -104,12 +109,15 @@ def parse_numstat(text: str) -> dict[str, FileChurn]:
         parts = line.split("\t")
         if len(parts) < 3:
             continue
-        added, deleted, raw_path = parts[_ADDED], parts[_DELETED], parts[_PATH]
+        added, deleted = parts[_ADDED], parts[_DELETED]
+        raw_path = "\t".join(parts[_PATH:])
         if added == "-" or deleted == "-":
             continue
         try:
             added_int, deleted_int = int(added), int(deleted)
         except ValueError:
+            continue
+        if added_int < 0 or deleted_int < 0:
             continue
         path = normalize_path(raw_path)
         if not path:
@@ -128,9 +136,13 @@ def collect_churn(
 ) -> dict[str, FileChurn]:
     """Return `{path: FileChurn}` for history up to `max_commits` commits."""
     args = ["log", f"--format={COMMIT_MARKER}%H", "--numstat"]
-    if since:
+    if since is not None:
+        if not isinstance(since, str) or not since.strip():
+            raise ValueError("since must be a non-blank string")
         args.append(f"--since={since}")
     if max_commits is not None:
+        if isinstance(max_commits, bool) or not isinstance(max_commits, int):
+            raise TypeError("max_commits must be an integer")
         if max_commits < 1:
             raise ValueError("max_commits must be a positive integer")
         args.append(f"--max-count={max_commits}")
@@ -139,4 +151,18 @@ def collect_churn(
 
 def repo_root(repo: Path, runner: Runner = _run_git) -> Path:
     """Resolve the work-tree root that `repo` belongs to."""
-    return Path(runner(Path(repo), ["rev-parse", "--show-toplevel"]).strip())
+    raw = runner(Path(repo), ["rev-parse", "--show-toplevel"])
+    if not isinstance(raw, str):
+        raise GitError(
+            "Why: git rev-parse returned non-text output.\n"
+            f"Fix: run this command inside a git work tree and check it with "
+            f"`git -C \"{repo}\" status`."
+        )
+    text = raw.strip("\r\n")
+    if not text.strip() or "\n" in text or "\r" in text:
+        raise GitError(
+            "Why: git rev-parse returned empty output.\n"
+            f"Fix: run this command inside a git work tree and check it with "
+            f"`git -C \"{repo}\" status`."
+        )
+    return Path(text)

@@ -11,6 +11,11 @@ from driftwood.scoring import Hotspot
 HEADER = ("#", "Score", "Churn", "Cplx", "Commits", "File")
 
 
+def _sanitize_path(path: str) -> str:
+    """Keep one-hotspot-one-line: replace control characters in paths."""
+    return path.replace("\r", "?").replace("\n", "?").replace("\t", "?").replace("\x1b", "?")
+
+
 def _row(index: int, item: Hotspot) -> tuple[str, ...]:
     return (
         str(index),
@@ -18,15 +23,20 @@ def _row(index: int, item: Hotspot) -> tuple[str, ...]:
         str(item.churn),
         str(item.complexity),
         str(item.commits),
-        item.path,
+        _sanitize_path(item.path),
     )
 
 
 def format_table(hotspots: Sequence[Hotspot]) -> str:
-    """Render an aligned, header-first table; paths stay at the end to avoid wrapping."""
-    if not hotspots:
+    """Render an aligned, header-first table; paths stay at the end to avoid wrapping.
+
+    Scores display ``.3f`` while stored scores keep ``.4f`` precision, so two
+    differently-ranked rows can render identically on the last digit.
+    """
+    items = list(hotspots) if not isinstance(hotspots, list) else hotspots
+    if not items:
         return "No hotspots found. Why: no text churn in the selected range.\nFix: widen --since, raise --commits, or check the path."
-    rows = [_row(index, item) for index, item in enumerate(hotspots, start=1)]
+    rows = [_row(index, item) for index, item in enumerate(items, start=1)]
     widths = [
         max(len(HEADER[column]), *(len(row[column]) for row in rows))
         for column in range(len(HEADER) - 1)
@@ -47,8 +57,9 @@ def format_table(hotspots: Sequence[Hotspot]) -> str:
 
 def format_json(hotspots: Sequence[Hotspot]) -> str:
     """Render hotspots as stable JSON for scripting."""
+    items = list(hotspots) if not isinstance(hotspots, list) else hotspots
     payload = {
-        "count": len(hotspots),
-        "hotspots": [asdict(item) for item in hotspots],
+        "count": len(items),
+        "hotspots": [asdict(item) for item in items],
     }
     return json.dumps(payload, indent=2, sort_keys=True)

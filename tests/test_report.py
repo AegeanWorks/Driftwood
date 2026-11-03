@@ -24,6 +24,17 @@ class FormatTableTests(unittest.TestCase):
         self.assertIn("Why:", output)
         self.assertIn("Fix:", output)
 
+    def test_embedded_newline_does_not_add_row(self):
+        evil = Hotspot("a\nb.py", commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5)
+        self.assertEqual(len(format_table([evil]).splitlines()), 3)
+
+    def test_generator_input_renders(self):
+        gen = (item for item in SAMPLE)
+        output = format_table(gen)
+        self.assertIn("src/app.py", output)
+        empty_gen = (item for item in [])
+        self.assertIn("Why:", format_table(empty_gen))
+
 
 class FormatJsonTests(unittest.TestCase):
     def test_payload_is_stable_and_parseable(self):

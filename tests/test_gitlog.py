@@ -105,10 +105,41 @@ class CollectChurnTests(unittest.TestCase):
     def test_rejects_non_positive_commit_limit(self):
         with self.assertRaises(ValueError):
             collect_churn(Path("repo"), max_commits=0, runner=lambda *_: "")
+        with self.assertRaises(TypeError):
+            collect_churn(Path("repo"), max_commits="50", runner=lambda *_: "")
+        with self.assertRaises((TypeError, ValueError)):
+            collect_churn(Path("repo"), max_commits=True, runner=lambda *_: "")
+        with self.assertRaises((TypeError, ValueError)):
+            collect_churn(Path("repo"), max_commits=2.5, runner=lambda *_: "")
+
+    def test_rejects_blank_since(self):
+        with self.assertRaises(ValueError):
+            collect_churn(Path("repo"), since="   ", runner=lambda *_: "")
+
+    def test_negative_counts_are_skipped(self):
+        text = "\n".join([f"{COMMIT_MARKER}a", "-5\t3\ta.py", "3\t-1\tb.py"])
+        self.assertEqual(parse_numstat(text), {})
+
+    def test_extra_tab_path_joined(self):
+        text = "\n".join([f"{COMMIT_MARKER}a", "1\t1\ta\tb.py"])
+        result = parse_numstat(text)
+        self.assertIn("a\tb.py", result)
 
     def test_repo_root_strips_whitespace(self):
         root = repo_root(Path("repo"), runner=lambda *_: "/tmp/project\n")
         self.assertEqual(root, Path("/tmp/project"))
+
+    def test_repo_root_rejects_empty_output(self):
+        from driftwood.gitlog import GitError
+
+        with self.assertRaises(GitError):
+            repo_root(Path("repo"), runner=lambda *_: "\n")
+        with self.assertRaises(GitError):
+            repo_root(Path("repo"), runner=lambda *_: "  \n")
+
+    def test_repo_root_preserves_trailing_space(self):
+        root = repo_root(Path("repo"), runner=lambda *_: "/tmp/proj \n")
+        self.assertEqual(root, Path("/tmp/proj "))
 
 
 if __name__ == "__main__":
