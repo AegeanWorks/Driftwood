@@ -67,6 +67,11 @@ def rank_hotspots(
             raise ValueError("top must be a positive integer")
     if not churn:
         return []
+    for value in complexity.values():
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError("complexity values must be finite numbers")
+        if not math.isfinite(float(value)) or float(value) < 0:
+            raise ValueError("complexity values must be finite non-negative numbers")
 
     churn_norm = normalize({path: stat.churn for path, stat in churn.items()})
     paths = sorted(churn)

@@ -70,6 +70,20 @@ class FileComplexityTests(unittest.TestCase):
                 complexity_map(root, ["keep.py", "gone.py"]), {"keep.py": 1}
             )
 
+    def test_map_rejects_absolute_and_parent_escape(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            (root / "keep.py").write_text("pass\n", encoding="utf-8")
+            self.assertEqual(complexity_map(root, ["/etc/hostname"]), {})
+            self.assertEqual(complexity_map(root, ["../outside.py"]), {})
+            self.assertEqual(complexity_map(root, ["sub/../keep.py"]), {})
+
+    def test_capped_read_rejects_oversized(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            (root / "big.py").write_bytes(b"x" * 400001)
+            self.assertEqual(file_complexity(root / "big.py"), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

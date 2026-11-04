@@ -35,6 +35,24 @@ class FormatTableTests(unittest.TestCase):
         empty_gen = (item for item in [])
         self.assertIn("Why:", format_table(empty_gen))
 
+    def test_long_path_truncated_with_ellipsis(self):
+        from driftwood.report import MAX_TABLE_PATH
+
+        long_path = "a/" * 80 + "file.py"
+        evil = Hotspot(long_path, commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5)
+        lines = format_table([evil]).splitlines()
+        self.assertEqual(len(lines), 3)
+        self.assertIn("...", lines[2])
+        self.assertLessEqual(len(lines[2].split("  ")[-1]), MAX_TABLE_PATH + 3)
+
+    def test_json_preserves_unicode_and_rejects_nan(self):
+        payload = json.loads(format_json([Hotspot("日本.py", 1, 1, 0, 1, 1, 0.5)]))
+        self.assertEqual(payload["hotspots"][0]["path"], "日本.py")
+        raw = format_json([Hotspot("日本.py", 1, 1, 0, 1, 1, 0.5)])
+        self.assertIn("日本.py", raw)
+        with self.assertRaises(ValueError):
+            format_json([Hotspot("a.py", 1, 1, 0, 1, 1, float("nan"))])
+
 
 class FormatJsonTests(unittest.TestCase):
     def test_payload_is_stable_and_parseable(self):

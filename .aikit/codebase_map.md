@@ -9,8 +9,8 @@
 - **Total Python Modules**: `14`
 - **Total Classes**: `15`
 - **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `64`
-- **Total Source Lines**: `1166`
+- **Total Class Methods**: `69`
+- **Total Source Lines**: `1228`
 
 ---
 
@@ -45,7 +45,7 @@
 ### [`driftwood/complexity.py`](driftwood/complexity.py)
 > *Language-aware complexity estimates that need only the standard library.*
 
-**Size**: `91` lines (`2360` bytes)
+**Size**: `100` lines (`2623` bytes)
 
 **Functions:**
 - `def python_complexity(source)` - *Cyclomatic-style count for Python: 1 + decision points (bounded by source size).*
@@ -80,7 +80,7 @@
 ### [`driftwood/report.py`](driftwood/report.py)
 > *Render ranked hotspots as a fixed-width table or JSON.*
 
-**Size**: `65` lines (`2264` bytes)
+**Size**: `73` lines (`2571` bytes)
 
 **Functions:**
 - `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control characters in paths.*
@@ -93,7 +93,7 @@
 ### [`driftwood/scoring.py`](driftwood/scoring.py)
 > *Blend churn and complexity into a single, comparable hotspot score.*
 
-**Size**: `97` lines (`3348` bytes)
+**Size**: `102` lines (`3684` bytes)
 
 **Classes:**
 - `class Hotspot` - *One ranked file: raw metrics plus the normalized blended score.*
@@ -135,7 +135,7 @@
 ---
 
 ### [`tests/test_complexity.py`](tests/test_complexity.py)
-**Size**: `75` lines (`2483` bytes)
+**Size**: `89` lines (`3186` bytes)
 
 **Classes:**
 - `class PythonComplexityTests`
@@ -149,6 +149,8 @@
 - `class FileComplexityTests`
   - Method `.test_dispatches_python_and_generic_files()`
   - Method `.test_missing_file_and_map_skip_absent_paths()`
+  - Method `.test_map_rejects_absolute_and_parent_escape()`
+  - Method `.test_capped_read_rejects_oversized()`
 
 ---
 
@@ -197,7 +199,7 @@
 ---
 
 ### [`tests/test_report.py`](tests/test_report.py)
-**Size**: `48` lines (`1672` bytes)
+**Size**: `66` lines (`2572` bytes)
 
 **Classes:**
 - `class FormatTableTests`
@@ -205,13 +207,15 @@
   - Method `.test_empty_report_explains_why_and_fix()`
   - Method `.test_embedded_newline_does_not_add_row()`
   - Method `.test_generator_input_renders()`
+  - Method `.test_long_path_truncated_with_ellipsis()`
+  - Method `.test_json_preserves_unicode_and_rejects_nan()`
 - `class FormatJsonTests`
   - Method `.test_payload_is_stable_and_parseable()`
 
 ---
 
 ### [`tests/test_scoring.py`](tests/test_scoring.py)
-**Size**: `87` lines (`3524` bytes)
+**Size**: `95` lines (`3897` bytes)
 
 **Classes:**
 - `class NormalizeTests`
@@ -228,6 +232,7 @@
   - Method `.test_nan_inf_weights_rejected()`
   - Method `.test_non_int_top_rejected()`
   - Method `.test_zero_weights_yield_zero_scored_but_retained()`
+  - Method `.test_invalid_complexity_values_rejected()`
 
 **Functions:**
 - `def _churn(churn, commits, added, deleted)`

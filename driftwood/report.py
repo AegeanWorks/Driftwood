@@ -9,11 +9,15 @@ from typing import Sequence
 from driftwood.scoring import Hotspot
 
 HEADER = ("#", "Score", "Churn", "Cplx", "Commits", "File")
+MAX_TABLE_PATH = 120
 
 
 def _sanitize_path(path: str) -> str:
     """Keep one-hotspot-one-line: replace control characters in paths."""
-    return path.replace("\r", "?").replace("\n", "?").replace("\t", "?").replace("\x1b", "?")
+    clean = path.replace("\r", "?").replace("\n", "?").replace("\t", "?").replace("\x1b", "?")
+    if len(clean) > MAX_TABLE_PATH:
+        return clean[:57] + "..." + clean[-60:]
+    return clean
 
 
 def _row(index: int, item: Hotspot) -> tuple[str, ...]:
@@ -56,10 +60,14 @@ def format_table(hotspots: Sequence[Hotspot]) -> str:
 
 
 def format_json(hotspots: Sequence[Hotspot]) -> str:
-    """Render hotspots as stable JSON for scripting."""
+    """Render hotspots as stable JSON for scripting.
+
+    ``ensure_ascii=False`` keeps non-ASCII paths human-readable;
+    ``allow_nan=False`` fails fast instead of emitting non-standard tokens.
+    """
     items = list(hotspots) if not isinstance(hotspots, list) else hotspots
     payload = {
         "count": len(items),
         "hotspots": [asdict(item) for item in items],
     }
-    return json.dumps(payload, indent=2, sort_keys=True)
+    return json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False, allow_nan=False)

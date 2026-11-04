@@ -82,6 +82,14 @@ class RankHotspotsTests(unittest.TestCase):
         self.assertEqual(len(ranked), 1)
         self.assertEqual(ranked[0].score, 0.0)
 
+    def test_invalid_complexity_values_rejected(self):
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {"a": float("nan")})
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {"a": float("inf")})
+        with self.assertRaises(ValueError):
+            rank_hotspots({"a": _churn(1)}, {"a": -1})
+
 
 if __name__ == "__main__":
     unittest.main()
