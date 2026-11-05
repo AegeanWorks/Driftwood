@@ -69,13 +69,15 @@ def _line_has_decision(line: str) -> bool:
 
 
 def file_complexity(path: Path) -> int:
-    """Estimate complexity for a file, returning 0 for unreadable or oversized files."""
+    """Estimate complexity for a file, returning 0 for unreadable, oversized or binary files."""
     try:
         with open(path, "rb") as handle:
             data = handle.read(MAX_BYTES + 1)
     except OSError:
         return 0
     if len(data) > MAX_BYTES:
+        return 0
+    if b"\x00" in data:
         return 0
     source = data.decode("utf-8", errors="replace")
     if path.suffix.lower() in PYTHON_SUFFIXES:
@@ -86,8 +88,8 @@ def file_complexity(path: Path) -> int:
 def complexity_map(root: Path, paths: list[str]) -> dict[str, int]:
     """Map each existing relative path in `paths` to its complexity estimate.
 
-    Absolute paths and parent escapes (``..``) are skipped to keep analysis
-    rooted at `root`.
+    Absolute paths, parent escapes (``..``) and symlinks are skipped to keep
+    analysis rooted at `root`.
     """
     result: dict[str, int] = {}
     for rel in paths:
@@ -95,6 +97,8 @@ def complexity_map(root: Path, paths: list[str]) -> dict[str, int]:
         if Path(rel).is_absolute() or ".." in parts:
             continue
         candidate = root / rel
+        if candidate.is_symlink():
+            continue
         if candidate.is_file():
             result[rel] = file_complexity(candidate)
     return result

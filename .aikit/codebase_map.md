@@ -9,8 +9,8 @@
 - **Total Python Modules**: `14`
 - **Total Classes**: `15`
 - **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `69`
-- **Total Source Lines**: `1228`
+- **Total Class Methods**: `74`
+- **Total Source Lines**: `1290`
 
 ---
 
@@ -31,7 +31,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `125` lines (`4026` bytes)
+**Size**: `132` lines (`4262` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -45,13 +45,13 @@
 ### [`driftwood/complexity.py`](driftwood/complexity.py)
 > *Language-aware complexity estimates that need only the standard library.*
 
-**Size**: `100` lines (`2623` bytes)
+**Size**: `104` lines (`2738` bytes)
 
 **Functions:**
 - `def python_complexity(source)` - *Cyclomatic-style count for Python: 1 + decision points (bounded by source size).*
 - `def generic_complexity(source)` - *Cheap multi-language estimate: 1 + lines carrying a branching marker.*
 - `def _line_has_decision(line)`
-- `def file_complexity(path)` - *Estimate complexity for a file, returning 0 for unreadable or oversized files.*
+- `def file_complexity(path)` - *Estimate complexity for a file, returning 0 for unreadable, oversized or binary files.*
 - `def complexity_map(root, paths)` - *Map each existing relative path in `paths` to its complexity estimate.*
 
 ---
@@ -80,10 +80,10 @@
 ### [`driftwood/report.py`](driftwood/report.py)
 > *Render ranked hotspots as a fixed-width table or JSON.*
 
-**Size**: `73` lines (`2571` bytes)
+**Size**: `77` lines (`2670` bytes)
 
 **Functions:**
-- `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control characters in paths.*
+- `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control and line-separator characters.*
 - `def _row(index, item)`
 - `def format_table(hotspots)` - *Render an aligned, header-first table; paths stay at the end to avoid wrapping.*
 - `def format_json(hotspots)` - *Render hotspots as stable JSON for scripting.*
@@ -110,7 +110,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `153` lines (`6547` bytes)
+**Size**: `162` lines (`6998` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -128,6 +128,7 @@
   - Method `.test_repo_root_git_error_returns_one()`
   - Method `.test_file_arg_uses_parent_dir()`
   - Method `.test_broken_pipe_does_not_raise()`
+  - Method `.test_blank_since_returns_two_without_traceback()`
 
 **Functions:**
 - `def _churn()`
@@ -135,7 +136,7 @@
 ---
 
 ### [`tests/test_complexity.py`](tests/test_complexity.py)
-**Size**: `89` lines (`3186` bytes)
+**Size**: `107` lines (`4005` bytes)
 
 **Classes:**
 - `class PythonComplexityTests`
@@ -151,6 +152,8 @@
   - Method `.test_missing_file_and_map_skip_absent_paths()`
   - Method `.test_map_rejects_absolute_and_parent_escape()`
   - Method `.test_capped_read_rejects_oversized()`
+  - Method `.test_binary_null_byte_scores_zero()`
+  - Method `.test_map_skips_symlinks()`
 
 ---
 
@@ -199,13 +202,15 @@
 ---
 
 ### [`tests/test_report.py`](tests/test_report.py)
-**Size**: `66` lines (`2572` bytes)
+**Size**: `86` lines (`3323` bytes)
 
 **Classes:**
 - `class FormatTableTests`
   - Method `.test_header_and_rows()`
   - Method `.test_empty_report_explains_why_and_fix()`
   - Method `.test_embedded_newline_does_not_add_row()`
+  - Method `.test_all_control_chars_sanitized()`
+  - Method `.test_unicode_line_separators_sanitized()`
   - Method `.test_generator_input_renders()`
   - Method `.test_long_path_truncated_with_ellipsis()`
   - Method `.test_json_preserves_unicode_and_rejects_nan()`

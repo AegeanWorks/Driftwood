@@ -28,6 +28,26 @@ class FormatTableTests(unittest.TestCase):
         evil = Hotspot("a\nb.py", commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5)
         self.assertEqual(len(format_table([evil]).splitlines()), 3)
 
+    def test_all_control_chars_sanitized(self):
+        evil = Hotspot(
+            "a\x00b\x07c\x1fv\x0bw.py",
+            commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5,
+        )
+        out = format_table([evil])
+        self.assertEqual(len(out.splitlines()), 3)
+        for bad in ("\x00", "\x07", "\x1f", "\x0b"):
+            self.assertNotIn(bad, out)
+        self.assertIn("a?b?c?v?w.py", out)
+
+    def test_unicode_line_separators_sanitized(self):
+        evil = Hotspot(
+            "a\u2028b\u2029c\x85.py",
+            commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5,
+        )
+        out = format_table([evil])
+        self.assertEqual(len(out.splitlines()), 3)
+        self.assertIn("a?b?c?.py", out)
+
     def test_generator_input_renders(self):
         gen = (item for item in SAMPLE)
         output = format_table(gen)

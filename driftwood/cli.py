@@ -92,10 +92,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         if repo_path.is_file():
             repo_path = repo_path.parent
         root = repo_root(repo_path)
+    except GitError as exc:
+        print(f"driftwood: {exc}", file=sys.stderr)
+        return 1
+    try:
         churn = collect_churn(root, since=args.since, max_commits=args.commits)
     except GitError as exc:
         print(f"driftwood: {exc}", file=sys.stderr)
         return 1
+    except (ValueError, TypeError) as exc:
+        print(f"driftwood: invalid argument: {exc}", file=sys.stderr)
+        return 2
 
     include = args.include or []
     exclude = args.exclude or []

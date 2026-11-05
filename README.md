@@ -47,7 +47,7 @@ Every file touched by history gets two normalized metrics:
 
 The score is `0.6 * churn + 0.4 * complexity`, both min-max scaled across the selected files, so a score of `1.000` marks the file that is both the most rewritten and the most branch-heavy. When a metric has no spread (for example a repository with a single churned file) its positive values saturate at `1.0`, so a real hotspot is never reported as `0.000`. Candidates with zero signal are skipped, and ties break on path to keep runs deterministic.
 
-Complexity is deliberately a cheap heuristic, not a linter: it counts decision points and ignores formatting. Git's rename notation is folded into the newest path, binary files are skipped, and files deleted from the work tree keep their churn with complexity `0`. Files over 400 kB or unreadable also score complexity `0` (indistinguishable from deleted in the report); scores display `.3f` in tables while the stored/JSON value keeps `.4f` precision.
+Complexity is deliberately a cheap heuristic, not a linter: it counts decision points and ignores formatting. Git's rename notation is folded into the newest path, binary files are skipped, and files deleted from the work tree keep their churn with complexity `0`. Files over 400 kB, unreadable, binary (NUL byte) or symlinked also score complexity `0` (indistinguishable from deleted in the report); scores display `.3f` in tables while the stored/JSON value keeps `.4f` precision.
 
 ### Options
 

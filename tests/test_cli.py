@@ -148,6 +148,15 @@ class CliTests(unittest.TestCase):
                         code = cli.main(["repo"])
         self.assertEqual(code, 0)
 
+    def test_blank_since_returns_two_without_traceback(self):
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            output = io.StringIO()
+            errors = io.StringIO()
+            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+                code = cli.main(["repo", "--since", "   "])
+        self.assertEqual(code, 2)
+        self.assertIn("invalid argument", errors.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

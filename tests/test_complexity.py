@@ -84,6 +84,24 @@ class FileComplexityTests(unittest.TestCase):
             (root / "big.py").write_bytes(b"x" * 400001)
             self.assertEqual(file_complexity(root / "big.py"), 0)
 
+    def test_binary_null_byte_scores_zero(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            (root / "bin.py").write_bytes(b"\x00\x01 if x:\n\xff")
+            self.assertEqual(file_complexity(root / "bin.py"), 0)
+
+    def test_map_skips_symlinks(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            root = Path(raw_dir)
+            (root / "keep.py").write_text("pass\n", encoding="utf-8")
+            link = root / "link.py"
+            try:
+                link.symlink_to(root / "keep.py")
+            except OSError:
+                self.skipTest("symlinks not supported on this machine")
+            self.assertNotIn("link.py", complexity_map(root, ["link.py"]))
+            self.assertIn("keep.py", complexity_map(root, ["keep.py"]))
+
 
 if __name__ == "__main__":
     unittest.main()
