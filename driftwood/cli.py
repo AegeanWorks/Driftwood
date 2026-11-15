@@ -8,12 +8,18 @@ import os
 import re
 import sys
 from datetime import date
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Sequence
 
 from driftwood import __version__
 from driftwood.complexity import complexity_map
-from driftwood.gitlog import GitError, collect_churn, git_session, repo_root
+from driftwood.gitlog import (
+    FileChurn,
+    GitError,
+    collect_churn,
+    git_session,
+    repo_root,
+)
 from driftwood.report import format_csv, format_json, format_table
 from driftwood.scoring import rank_hotspots
 
@@ -135,6 +141,13 @@ def build_parser() -> argparse.ArgumentParser:
         default=0.0,
         help="hide rows below this score as displayed (3 decimals, applied before --top)",
     )
+    parser.add_argument(
+        "--group-by",
+        choices=("dir",),
+        default=None,
+        metavar="DIM",
+        help="aggregate churn and complexity per directory (top-level: '.')",
+    )
     parser.add_argument("--version", action="version", version=f"driftwood {__version__}")
     return parser
 
@@ -155,6 +168,30 @@ def _matches(path: str, include: Sequence[str], exclude: Sequence[str]) -> bool:
     ):
         return False
     return not any(fnmatch.fnmatchcase(path, pattern) for pattern in exclude)
+
+
+def _group_by_dir(
+    churn: dict[str, FileChurn], complexity: dict[str, int]
+) -> tuple[dict[str, FileChurn], dict[str, int]]:
+    """Aggregate file churn and complexity per directory (top-level: ``.``).
+
+    Commits count file-commit pairs: a commit touching three files in one
+    directory adds three, matching the additive churn rows.
+    """
+    dir_churn: dict[str, FileChurn] = {}
+    for path, stat in churn.items():
+        directory = PurePosixPath(path).parent.as_posix()
+        current = dir_churn.get(directory, FileChurn())
+        dir_churn[directory] = FileChurn(
+            current.commits + stat.commits,
+            current.added + stat.added,
+            current.deleted + stat.deleted,
+        )
+    dir_complexity: dict[str, int] = {}
+    for path, value in complexity.items():
+        directory = PurePosixPath(path).parent.as_posix()
+        dir_complexity[directory] = dir_complexity.get(directory, 0) + value
+    return dir_churn, dir_complexity
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -183,7 +220,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         if _matches(path, include, exclude)
     }
     complexity = complexity_map(root, sorted(selected))
-    ranked = rank_hotspots(selected, complexity)
+    if args.group_by == "dir":
+        grouped_churn, complexity = _group_by_dir(selected, complexity)
+        ranked = rank_hotspots(grouped_churn, complexity)
+    else:
+        ranked = rank_hotspots(selected, complexity)
     shown = [
         item for item in ranked if _display_score(item.score) >= args.min_score
     ][: args.top]

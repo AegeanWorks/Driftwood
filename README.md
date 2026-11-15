@@ -60,6 +60,7 @@ Complexity is deliberately a cheap heuristic, not a linter: it counts decision p
 | `--format table\|json\|csv` | Human table, scriptable JSON (stored 4-decimal scores), or CSV (3-decimal scores, header always present) |
 | `--include GLOB` / `--exclude GLOB` | Repeatable case-sensitive path filters (`*` also spans `/`) |
 | `--min-score <f>` | Hide rows whose displayed score (3 decimals) is below this, applied before `--top` |
+| `--group-by dir` | Aggregate churn and complexity per directory, then rank directories; top-level files group as `.`, and a commit touching three files in one dir adds three commits (file-commit pairs) |
 
 Numeric flags are validated up front: `--top` and `--commits` need a positive integer, `--min-score` needs a non-negative number, and a rejected value exits `2` with usage instead of a stack trace.
 

@@ -8,9 +8,9 @@
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `14`
 - **Total Classes**: `18`
-- **Total Top-Level Functions**: `33`
-- **Total Class Methods**: `95`
-- **Total Source Lines**: `1670`
+- **Total Top-Level Functions**: `34`
+- **Total Class Methods**: `98`
+- **Total Source Lines**: `1750`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -35,7 +35,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `211` lines (`7238` bytes)
+**Size**: `252` lines (`8644` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -45,6 +45,7 @@
 - `def build_parser()`
 - `def _display_score(score)` - *The score as the table renders it, so --min-score filters what is shown.*
 - `def _matches(path, include, exclude)`
+- `def _group_by_dir(churn, complexity)` - *Aggregate file churn and complexity per directory (top-level: ``.``).*
 - `def main(argv)`
 
 ---
@@ -121,13 +122,16 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `293` lines (`12579` bytes)
+**Size**: `332` lines (`14359` bytes)
 
 **Classes:**
 - `class CliTests`
   - Method `._run(argv, churn, error)`
   - Method `.test_table_output_sorted_by_score()`
   - Method `.test_json_output()`
+  - Method `.test_group_by_dir_adds_file_metrics()`
+  - Method `.test_group_by_dir_puts_top_level_files_under_dot()`
+  - Method `.test_group_by_dir_ranks_dirs_by_complexity_too()`
   - Method `.test_exclude_filter_drops_paths()`
   - Method `.test_include_filter_keeps_matching_paths()`
   - Method `.test_empty_include_keeps_all_paths()`

@@ -43,6 +43,45 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(payload["count"], 2)
 
+    def test_group_by_dir_adds_file_metrics(self):
+        churn = {
+            "src/a.py": FileChurn(commits=2, added=10, deleted=2),
+            "src/b.py": FileChurn(commits=1, added=4, deleted=1),
+            "docs/c.md": FileChurn(commits=1, added=2, deleted=0),
+        }
+        code, out, _ = self._run(
+            ["repo", "--format", "json", "--group-by", "dir"],
+            churn=churn,
+        )
+        payload = json.loads(out)
+        self.assertEqual(code, 0)
+        by_path = {item["path"]: item for item in payload["hotspots"]}
+        self.assertEqual(sorted(by_path), ["docs", "src"])
+        self.assertEqual(by_path["src"]["added"], 14)
+        self.assertEqual(by_path["src"]["deleted"], 3)
+        self.assertEqual(by_path["src"]["commits"], 3)
+        self.assertEqual(by_path["src"]["churn"], 17)
+
+    def test_group_by_dir_puts_top_level_files_under_dot(self):
+        churn = {"readme.md": FileChurn(commits=1, added=5, deleted=0)}
+        code, out, _ = self._run(
+            ["repo", "--format", "json", "--group-by", "dir"],
+            churn=churn,
+        )
+        payload = json.loads(out)
+        self.assertEqual(code, 0)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["."])
+
+    def test_group_by_dir_ranks_dirs_by_complexity_too(self):
+        churn = {
+            "src/a.py": FileChurn(commits=1, added=2, deleted=0),
+            "src/b.py": FileChurn(commits=1, added=2, deleted=0),
+        }
+        code, out, _ = self._run(["repo", "--format", "json", "--group-by", "dir"], churn=churn)
+        payload = json.loads(out)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["src"])
+        self.assertEqual(payload["hotspots"][0]["complexity"], 0)  # default mocked complexity_map
+
     def test_exclude_filter_drops_paths(self):
         code, out, _ = self._run(["repo", "--format", "json", "--exclude", "docs/*"])
         payload = json.loads(out)
