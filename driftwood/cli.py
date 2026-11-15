@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import os
+import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Sequence
 
@@ -36,13 +38,74 @@ def _non_negative_float(raw: str) -> float:
     return value
 
 
+_SINCE_ABSOLUTE = re.compile(
+    r"^(?P<year>\d{4})-?(?P<month>\d{2})?-?(?P<day>\d{2})?"
+    r"(?:[ T](?P<hour>\d{2}):(?P<minute>\d{2})(?::(?P<second>\d{2}))?)?"
+    r"(?: ?(?P<tz>[+-]\d{2}:?\d{2}|Z))?$"
+)
+_SINCE_RELATIVE = re.compile(
+    r"^\d+(?:\s*\.\s*|\s+)(?:second|minute|hour|day|week|month|year)s?"
+    r"(?:\s*\.\s*|\s+)ago$"
+)
+_SINCE_WEEKDAY = re.compile(
+    r"^(?:(?:last|next)\s+)?"
+    r"(?:monday|mon|tuesday|tues|tue|wednesday|weds|wed|thursday|thurs|thu"
+    r"|friday|fri|saturday|sat|sunday|sun)$"
+)
+_SINCE_KEYWORDS = {"now", "today", "yesterday"}
+
+
+def _is_supported_since(value: str) -> bool:
+    """Reject git's silent approxidate fallbacks, accept documented forms only."""
+    lowered = value.lower()
+    if lowered in _SINCE_KEYWORDS:
+        return True
+    if _SINCE_ABSOLUTE.match(value):
+        match = _SINCE_ABSOLUTE.match(value)
+        try:
+            year, month = int(match.group("year")), 1
+            if match.group("month"):
+                month = int(match.group("month"))
+                if match.group("day"):
+                    date(year, month, int(match.group("day")))
+        except ValueError:
+            return False
+        if match.group("hour") and int(match.group("hour")) > 23:
+            return False
+        if match.group("minute") and int(match.group("minute")) > 59:
+            return False
+        return not (match.group("second") and int(match.group("second")) > 59)
+    return (
+        bool(_SINCE_RELATIVE.match(lowered))
+        or bool(_SINCE_WEEKDAY.match(lowered))
+        or (lowered.startswith("@") and lowered[1:].isdigit())
+    )
+
+
+def _since_value(raw: str) -> str:
+    value = raw.strip()
+    if value and _is_supported_since(value):
+        return value
+    raise argparse.ArgumentTypeError(
+        f"invalid argument: expected a date like '12.months.ago', "
+        f"'2 weeks ago', '2024-01-15' or 'last monday', got {raw!r}. "
+        f"Why: git silently parses unknown words as 'now', which would "
+        f"truncate history without an error. Fix: use one of the accepted forms."
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="driftwood",
         description="Rank code hotspots by combining git churn with file complexity.",
     )
     parser.add_argument("repo", nargs="?", default=".", help="path inside the git work tree")
-    parser.add_argument("--since", help="git date filter, for example '12.months.ago'")
+    parser.add_argument(
+        "--since",
+        type=_since_value,
+        help="git date filter: '12.months.ago', '2 weeks ago', '2024-01-15', "
+        "'@epoch', 'now', 'yesterday' or 'last monday'; anything else exits 2",
+    )
     parser.add_argument(
         "--commits", type=_positive_int, help="only the newest N commits"
     )

@@ -54,7 +54,7 @@ Complexity is deliberately a cheap heuristic, not a linter: it counts decision p
 | Flag | Meaning |
 |---|---|
 | `repo` | Path inside the git work tree (default: `.`) |
-| `--since <date>` | Passed to `git log --since`, e.g. `6.months.ago` |
+| `--since <date>` | Git date filter: `12.months.ago` (also spaced: `2 weeks ago`), `2024-01-15` (ISO), `@epoch`, `now`, `yesterday`, `last monday`; anything else exits `2` because git would silently parse it as `now` |
 | `--commits <n>` | Only the newest `n` commits |
 | `--top <n>` | Rows to print (default: 20) |
 | `--format table\|json` | Human table or scriptable JSON |

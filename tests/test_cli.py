@@ -178,13 +178,65 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         output.write("still usable")
 
+    def test_since_accepts_documented_forms(self):
+        parser = cli.build_parser()
+        for value in (
+            "12.months.ago",
+            "6 months ago",
+            "1.week.ago",
+            "2 hours ago",
+            "2024-01-15",
+            "2024-01-15 10:30",
+            "2024-01-15T10:30:00+03:00",
+            "@1730000000",
+            "now",
+            "today",
+            "yesterday",
+            "last monday",
+            "monday",
+        ):
+            with self.subTest(value=value):
+                self.assertEqual(parser.parse_args(["--since", value]).since, value)
+
+    def test_since_rejects_approxidate_garbage(self):
+        parser = cli.build_parser()
+        for value in (
+            "banana",
+            "0",
+            "1.unit.ago",
+            "fortnight",
+            "2024-13-45",
+            "2024-01-15 25:00",
+            "",
+            "   ",
+        ):
+            with self.subTest(value=value), self.assertRaises(SystemExit) as ctx:
+                parser.parse_args(["--since", value])
+            self.assertEqual(ctx.exception.code, 2)
+
+    def test_since_garbage_exits_two_before_git(self):
+        errors = io.StringIO()
+        with mock.patch.object(
+            cli, "repo_root", side_effect=AssertionError("git must not be reached")
+        ) as root_mock:
+            with contextlib.redirect_stderr(errors), contextlib.redirect_stdout(io.StringIO()):
+                with self.assertRaises(SystemExit) as ctx:
+                    cli.main(["repo", "--since", "banana"])
+        self.assertEqual(ctx.exception.code, 2)
+        root_mock.assert_not_called()
+        self.assertIn("invalid argument", errors.getvalue())
+
     def test_blank_since_returns_two_without_traceback(self):
-        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
-            output = io.StringIO()
+        # argparse now rejects blank --since itself: SystemExit(2) with usage
+        # guidance on stderr, before repo_root or git are ever reached.
+        with mock.patch.object(
+            cli, "repo_root", side_effect=AssertionError("git must not be reached")
+        ):
             errors = io.StringIO()
-            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
-                code = cli.main(["repo", "--since", "   "])
-        self.assertEqual(code, 2)
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(errors):
+                with self.assertRaises(SystemExit) as ctx:
+                    cli.main(["repo", "--since", "   "])
+        self.assertEqual(ctx.exception.code, 2)
         self.assertIn("invalid argument", errors.getvalue())
 
 
