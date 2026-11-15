@@ -1,11 +1,11 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "reforge:run-3",
+    "task_id": "gap-fixes-2",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1794761990.7100513,
+    "updated_at": 1794763414.5117147,
     "owner": "vibe:1",
     "started_by": "vibe:1",
     "continuations": [],
@@ -15,93 +15,11 @@
         "path": "projects/driftwood"
       }
     ],
-    "completed_at": 1794761991.143306,
-    "completed_head": "acb67d31e21d7841281c2f5c49d9f5e91e0f4a42",
-    "completed_tree": "4dffac8a97b4bfeea758802c71868425712f921c"
+    "completed_at": 1794763415.033868,
+    "completed_head": "f5387178f057703d761e714af2de3733b0a305bd",
+    "completed_tree": "80d2f5d6a0579f341f1abeb1c5d9f88da27fc5a6"
   },
   "checkpoints": [
-    {
-      "task_id": "driftwood-reforge-fixes",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/1] Fix remaining Reforge findings: quoted git paths, --include test, license references",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291778.425303,
-      "timestamp_str": "2026-10-29 19:36:18",
-      "agent": "opencode:reforge-followup",
-      "impact_assessment": {
-        "why": "Reforge reported three findings beyond the two auto-repaired ones; the non-ASCII path bug corrupts hotspot rows and complexity.",
-        "benefits": "Non-ASCII repositories report real paths and complexity; --include has a regression test; the license text links the canonical CLA and ACL instead of missing local files.",
-        "risks": "contract: normalize_path now preserves literal backslashes in quoted paths; dependency: stdlib codecs only; concurrency: none; state: no state format change.",
-        "mitigation": "Unit and real-git integration tests pin the decoded path and backslash behavior; project gates run before commit."
-      }
-    },
-    {
-      "task_id": "driftwood-reforge-fixes",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[milestone 1/1] Remaining Reforge fixes and tests complete; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291795.5932515,
-      "timestamp_str": "2026-10-29 19:36:35",
-      "agent": "opencode:reforge-followup"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 2",
-      "phase_num": 3,
-      "description": "Reforge stage 2: run resumed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291844.7031994,
-      "timestamp_str": "2026-10-29 19:37:24",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 3",
-      "phase_num": 3,
-      "description": "Reforge stage 3: window 5, 1 commit(s), 10 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291854.246948,
-      "timestamp_str": "2026-10-29 19:37:34",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 3",
-      "phase_num": 3,
-      "description": "Reforge stage 3: run stopped at stage 3; resume it with `reforge resume`",
-      "files_affected": [],
-      "status": "suspended",
-      "timestamp": 1793291895.326552,
-      "timestamp_str": "2026-10-29 19:38:15",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "driftwood-reforge-fixes",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'driftwood-reforge-fixes' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793291907.1261735,
-      "timestamp_str": "2026-10-29 19:38:27",
-      "agent": "opencode:reforge-followup"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 3",
-      "phase_num": 3,
-      "description": "Reforge stage 3: run resumed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793292050.9927132,
-      "timestamp_str": "2026-10-29 19:40:50",
-      "agent": "opencode"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 4",
@@ -274,6 +192,133 @@
       "status": "completed",
       "timestamp": 1794761991.1854901,
       "timestamp_str": "2026-11-15 19:59:51",
+      "agent": "vibe:1",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[3/3] Plan: strict --since grammar, WYSIWYG min-score filter, cumulative git timeout budget",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794762355.1571171,
+      "timestamp_str": "2026-11-15 20:05:55",
+      "agent": "vibe:1",
+      "impact_assessment": {
+        "why": "Three recorded verification gaps: git's approxidate silently accepts garbage --since (banana/0/1.unit.ago parse to now-like dates, exit 0 with a truncated or empty report); --min-score compares the 4-decimal internal score while the table shows 3 decimals, so a 0.300-displayed row can be filtered out at --min-score 0.3; git log --numstat on a huge repo can exceed the fixed 60s per-call timeout with no cumulative budget",
+        "benefits": "WYSIWYG CLI: every accepted input and filtered row matches what the user sees; malformed relative dates fail at argparse (exit 2) before any git call; long numstat walks get an explicit bounded budget instead of a thin 60s window",
+        "risks": "contract: --since now rejects approxidate strings outside the documented grammar (deliberate, message lists accepted forms); dependency: none (stdlib regexes); concurrency: budget state is module-level but driftwood is single-threaded per invocation; state: none",
+        "mitigation": "grammar helper is pure regex, unit-tested subtest-per-form; budget ships as a git_session() context manager so library users and the 2-arg Runner fakes keep the old contract; failing-first tests per gap"
+      },
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[1/3] --since grammar committed 22f99aa: tests 75 pass incl. failing-first grammar subtests; real CLI: --since banana exits 2 with Why/Fix before any git call; README --since row updated same commit",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794762863.7679386,
+      "timestamp_str": "2026-11-15 20:14:23",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/3] starting WYSIWYG min-score: filter compares the 3-decimal display value, so a row shown as 0.300 cannot be dropped at --min-score 0.3",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794762864.3450332,
+      "timestamp_str": "2026-11-15 20:14:24",
+      "agent": "vibe:1",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/3] min-score WYSIWYG committed e9ca190: tests 77 pass incl. display-parity regression test; README/help updated",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763114.1160755,
+      "timestamp_str": "2026-11-15 20:18:34",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] starting cumulative git budget: git_session() context caps total git wall time, no-session callers keep the 60s per-call contract",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763114.5998182,
+      "timestamp_str": "2026-11-15 20:18:34",
+      "agent": "vibe:1",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] session budget committed f538717: tests 82 pass; checklists: passed (4/4 gates 22f99aa..f538717 milestones, codebase map regenerated, README updated)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763414.5117147,
+      "timestamp_str": "2026-11-15 20:23:34",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "gap-fixes-2",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'gap-fixes-2' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794763415.082575,
+      "timestamp_str": "2026-11-15 20:23:35",
       "agent": "vibe:1",
       "delivery": {
         "roots": [
