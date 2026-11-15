@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `14`
-- **Total Classes**: `15`
-- **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `77`
-- **Total Source Lines**: `1324`
+- **Total Classes**: `17`
+- **Total Top-Level Functions**: `32`
+- **Total Class Methods**: `89`
+- **Total Source Lines**: `1605`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -35,12 +35,15 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `136` lines (`4545` bytes)
+**Size**: `208` lines (`7179` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
 - `def _non_negative_float(raw)`
+- `def _is_supported_since(value)` - *Reject git's silent approxidate fallbacks, accept documented forms only.*
+- `def _since_value(raw)`
 - `def build_parser()`
+- `def _display_score(score)` - *The score as the table renders it, so --min-score filters what is shown.*
 - `def _matches(path, include, exclude)`
 - `def main(argv)`
 
@@ -63,7 +66,7 @@
 ### [`driftwood/gitlog.py`](driftwood/gitlog.py)
 > *Read per-file churn from a local git repository without third-party tools.*
 
-**Size**: `168` lines (`5770` bytes)
+**Size**: `212` lines (`7397` bytes)
 
 **Classes:**
 - `class GitError` - *A git invocation failed; the message carries Why and Fix guidance.*
@@ -72,6 +75,9 @@
   - Property `.churn`
 
 **Functions:**
+- `def git_session(total_seconds)` - *Cap the cumulative wall time of the git calls made inside the block.*
+- `def session_deadline()` - *The active session's absolute deadline, or None outside git_session().*
+- `def _call_timeout()`
 - `def _run_git(repo, args)`
 - `def _unquote_path(raw)` - *Decode git's C-style quoted path and say whether the input was quoted.*
 - `def normalize_path(raw)` - *Reduce git's rename notation to the newest path, using forward slashes.*
@@ -114,7 +120,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `192` lines (`8435` bytes)
+**Size**: `293` lines (`12579` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -126,6 +132,8 @@
   - Method `.test_empty_include_keeps_all_paths()`
   - Method `.test_git_error_returns_one_with_remediation()`
   - Method `.test_min_score_filters_before_top_slices()`
+  - Method `.test_display_score_matches_table_column()`
+  - Method `.test_min_score_keeps_row_that_displays_above_threshold()`
   - Method `.test_include_match_is_case_sensitive()`
   - Method `.test_invalid_numeric_flags_exit_two()`
   - Method `.test_parser_defaults_are_fresh()`
@@ -135,6 +143,10 @@
   - Method `.test_broken_pipe_does_not_raise()`
   - Method `.test_broken_pipe_on_real_fd_redirects_to_devnull()`
   - Method `.test_broken_pipe_does_not_close_stdout()`
+  - Method `.test_main_runs_git_inside_budget_session()`
+  - Method `.test_since_accepts_documented_forms()`
+  - Method `.test_since_rejects_approxidate_garbage()`
+  - Method `.test_since_garbage_exits_two_before_git()`
   - Method `.test_blank_since_returns_two_without_traceback()`
 
 **Functions:**
@@ -165,9 +177,17 @@
 ---
 
 ### [`tests/test_gitlog.py`](tests/test_gitlog.py)
-**Size**: `146` lines (`4930` bytes)
+**Size**: `210` lines (`7397` bytes)
 
 **Classes:**
+- `class _FakeClock` - *Stands in for gitlog.time so tests move the clock without sleeping.*
+  - Method `.__init__()`
+  - Method `.monotonic()`
+- `class GitTimeoutBudgetTests`
+  - Method `.test_no_session_keeps_default_per_call_timeout()`
+  - Method `.test_session_lets_a_single_call_use_remaining_budget()`
+  - Method `.test_exhausted_budget_fails_fast_and_names_the_budget()`
+  - Method `.test_session_resets_deadline_on_exit()`
 - `class ParseNumstatTests`
   - Method `.test_aggregates_changes_across_commits()`
   - Method `.test_ignores_binary_and_malformed_lines()`
@@ -188,6 +208,9 @@
   - Method `.test_repo_root_strips_whitespace()`
   - Method `.test_repo_root_rejects_empty_output()`
   - Method `.test_repo_root_preserves_trailing_space()`
+
+**Functions:**
+- `def _captured_run(timeouts)`
 
 ---
 

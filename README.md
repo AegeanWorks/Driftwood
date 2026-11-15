@@ -63,6 +63,8 @@ Complexity is deliberately a cheap heuristic, not a linter: it counts decision p
 
 Numeric flags are validated up front: `--top` and `--commits` need a positive integer, `--min-score` needs a non-negative number, and a rejected value exits `2` with usage instead of a stack trace.
 
+Git calls share a cumulative 240 s budget per invocation: each call may use whatever remains, so one slow `git log --numstat` on a huge repository gets more than the 60 s per-call default. When the budget runs out, or git exceeds it, exit is `1` with a `Why:`/`Fix:` message.
+
 Exit codes: `0` success (including an empty report), `1` git/IO failure with `Why:` and `Fix:` guidance, `2` invalid arguments.
 
 ## 📦 What's Inside

@@ -13,7 +13,7 @@ from typing import Sequence
 
 from driftwood import __version__
 from driftwood.complexity import complexity_map
-from driftwood.gitlog import GitError, collect_churn, repo_root
+from driftwood.gitlog import GitError, collect_churn, git_session, repo_root
 from driftwood.report import format_json, format_table
 from driftwood.scoring import rank_hotspots
 
@@ -165,12 +165,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         repo_path = Path(args.repo)
         if repo_path.is_file():
             repo_path = repo_path.parent
-        root = repo_root(repo_path)
-    except GitError as exc:
-        print(f"driftwood: {exc}", file=sys.stderr)
-        return 1
-    try:
-        churn = collect_churn(root, since=args.since, max_commits=args.commits)
+        with git_session():
+            root = repo_root(repo_path)
+            churn = collect_churn(root, since=args.since, max_commits=args.commits)
     except GitError as exc:
         print(f"driftwood: {exc}", file=sys.stderr)
         return 1

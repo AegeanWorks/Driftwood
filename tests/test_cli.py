@@ -209,6 +209,24 @@ class CliTests(unittest.TestCase):
         self.assertEqual(code, 0)
         output.write("still usable")
 
+    def test_main_runs_git_inside_budget_session(self):
+        from driftwood import gitlog
+
+        seen = {}
+
+        def fake_root(repo):
+            seen["deadline"] = gitlog.session_deadline()
+            return Path(".")
+
+        with mock.patch.object(cli, "repo_root", side_effect=fake_root):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", return_value={}):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        code = cli.main(["repo"])
+        self.assertEqual(code, 0)
+        self.assertIsNotNone(seen["deadline"])
+        self.assertIsNone(gitlog.session_deadline())
+
     def test_since_accepts_documented_forms(self):
         parser = cli.build_parser()
         for value in (

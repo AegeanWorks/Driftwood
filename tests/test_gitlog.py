@@ -1,14 +1,78 @@
+import subprocess
 import unittest
 from pathlib import Path
+from unittest import mock
 
+from driftwood import gitlog
 from driftwood.gitlog import (
     COMMIT_MARKER,
     FileChurn,
+    GitError,
     collect_churn,
+    git_session,
     normalize_path,
     parse_numstat,
     repo_root,
 )
+
+
+def _captured_run(timeouts):
+    def fake_run(cmd, **kwargs):
+        timeouts.append(kwargs["timeout"])
+        raise subprocess.TimeoutExpired(cmd, 9999)
+
+    return fake_run
+
+
+class _FakeClock:
+    """Stands in for gitlog.time so tests move the clock without sleeping."""
+
+    def __init__(self):
+        self.value = 0.0
+
+    def monotonic(self):
+        return self.value
+
+
+class GitTimeoutBudgetTests(unittest.TestCase):
+    def test_no_session_keeps_default_per_call_timeout(self):
+        timeouts = []
+        with mock.patch.object(gitlog.subprocess, "run", side_effect=_captured_run(timeouts)):
+            with self.assertRaises(GitError):
+                gitlog._run_git(Path("."), ["status"])
+        self.assertEqual(timeouts, [gitlog.PER_CALL_TIMEOUT_SECONDS])
+
+    def test_session_lets_a_single_call_use_remaining_budget(self):
+        timeouts = []
+        with mock.patch.object(gitlog.subprocess, "run", side_effect=_captured_run(timeouts)):
+            with git_session(5.0):
+                with self.assertRaises(GitError):
+                    gitlog._run_git(Path("."), ["log", "--numstat"])
+        self.assertGreaterEqual(timeouts[0], 4.5)
+        self.assertLessEqual(timeouts[0], 5.0)
+
+    def test_exhausted_budget_fails_fast_and_names_the_budget(self):
+        timeouts = []
+        clock = _FakeClock()
+        with git_session(5.0):
+            clock.value = gitlog.session_deadline() + 10.0
+            with mock.patch.object(gitlog, "time", clock):
+                with mock.patch.object(gitlog.subprocess, "run", side_effect=_captured_run(timeouts)):
+                    with self.assertRaises(GitError) as ctx:
+                        gitlog._run_git(Path("."), ["status"])
+        self.assertLessEqual(timeouts[0], 0.2)
+        self.assertIn("budget is exhausted", str(ctx.exception))
+        self.assertIsNone(gitlog.session_deadline())
+
+    def test_session_resets_deadline_on_exit(self):
+        with git_session(5.0):
+            self.assertIsNotNone(gitlog.session_deadline())
+        self.assertIsNone(gitlog.session_deadline())
+        timeouts = []
+        with mock.patch.object(gitlog.subprocess, "run", side_effect=_captured_run(timeouts)):
+            with self.assertRaises(GitError):
+                gitlog._run_git(Path("."), ["status"])
+        self.assertEqual(timeouts, [gitlog.PER_CALL_TIMEOUT_SECONDS])
 
 
 class ParseNumstatTests(unittest.TestCase):

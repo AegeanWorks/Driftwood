@@ -4,12 +4,48 @@ from __future__ import annotations
 
 import codecs
 import subprocess
+import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Iterator
 
 COMMIT_MARKER = "__COMMIT__"
 _ADDED, _DELETED, _PATH = 0, 1, 2
+
+PER_CALL_TIMEOUT_SECONDS = 60.0
+GIT_TOTAL_BUDGET_SECONDS = 240.0
+_EXHAUSTED_TIMEOUT_SECONDS = 0.05
+
+_budget_deadline: float | None = None
+
+
+@contextmanager
+def git_session(total_seconds: float = GIT_TOTAL_BUDGET_SECONDS) -> Iterator[None]:
+    """Cap the cumulative wall time of the git calls made inside the block.
+
+    Each call inside the session may use whatever budget remains, so one slow
+    `git log --numstat` on a huge repository gets more than the per-call
+    default without letting the whole invocation run unbounded.
+    """
+    global _budget_deadline
+    _budget_deadline = time.monotonic() + total_seconds
+    try:
+        yield
+    finally:
+        _budget_deadline = None
+
+
+def session_deadline() -> float | None:
+    """The active session's absolute deadline, or None outside git_session()."""
+    return _budget_deadline
+
+
+def _call_timeout() -> float:
+    if _budget_deadline is None:
+        return PER_CALL_TIMEOUT_SECONDS
+    remaining = _budget_deadline - time.monotonic()
+    return remaining if remaining > _EXHAUSTED_TIMEOUT_SECONDS else _EXHAUSTED_TIMEOUT_SECONDS
 
 
 class GitError(RuntimeError):
@@ -36,6 +72,7 @@ Runner = Callable[[Path, list[str]], str]
 
 
 def _run_git(repo: Path, args: list[str]) -> str:
+    timeout = _call_timeout()
     try:
         result = subprocess.run(
             ["git", "-C", str(repo), *args],
@@ -43,7 +80,7 @@ def _run_git(repo: Path, args: list[str]) -> str:
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=60,
+            timeout=timeout,
             check=False,
         )
     except FileNotFoundError as exc:
@@ -57,9 +94,16 @@ def _run_git(repo: Path, args: list[str]) -> str:
             "Fix: check that git is installed and the repository is accessible."
         ) from exc
     except subprocess.TimeoutExpired as exc:
+        if _budget_deadline is not None and timeout <= _EXHAUSTED_TIMEOUT_SECONDS:
+            detail = f"; the {GIT_TOTAL_BUDGET_SECONDS:.0f}s cumulative git budget is exhausted"
+        elif _budget_deadline is not None:
+            detail = f" (of the {GIT_TOTAL_BUDGET_SECONDS:.0f}s cumulative git budget)"
+        else:
+            detail = ""
         raise GitError(
-            "Why: git did not answer within 60 seconds.\n"
-            "Fix: check that the repository is healthy and retry."
+            f"Why: git did not answer within {timeout:.2g}s{detail}.\n"
+            "Fix: check that the repository is healthy and retry; very large "
+            "histories may need a larger git_session budget."
         ) from exc
     if result.returncode != 0:
         detail = (result.stderr or result.stdout).strip() or "no output"
