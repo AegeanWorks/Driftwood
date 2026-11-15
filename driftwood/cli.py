@@ -67,8 +67,8 @@ def _is_supported_since(value: str) -> bool:
     lowered = value.lower()
     if lowered in _SINCE_KEYWORDS:
         return True
-    if _SINCE_ABSOLUTE.match(value):
-        match = _SINCE_ABSOLUTE.match(value)
+    match = _SINCE_ABSOLUTE.match(value)
+    if match:
         try:
             year, month = int(match.group("year")), 1
             if match.group("month"):

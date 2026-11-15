@@ -35,7 +35,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `265` lines (`9161` bytes)
+**Size**: `265` lines (`9134` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
