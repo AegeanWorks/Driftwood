@@ -133,10 +133,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--min-score",
         type=_non_negative_float,
         default=0.0,
-        help="hide rows below this score (applied before --top)",
+        help="hide rows below this score as displayed (3 decimals, applied before --top)",
     )
     parser.add_argument("--version", action="version", version=f"driftwood {__version__}")
     return parser
+
+
+def _display_score(score: float) -> float:
+    """The score as the table renders it, so --min-score filters what is shown.
+
+    Scores are stored at 4-decimal precision but the table prints ``.3f``;
+    filtering on the raw value could hide a row the user sees passing, e.g. a
+    0.300-displayed 0.2996 under ``--min-score 0.3``.
+    """
+    return float(f"{score:.3f}")
 
 
 def _matches(path: str, include: Sequence[str], exclude: Sequence[str]) -> bool:
@@ -177,7 +187,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     complexity = complexity_map(root, sorted(selected))
     ranked = rank_hotspots(selected, complexity)
-    shown = [item for item in ranked if item.score >= args.min_score][: args.top]
+    shown = [
+        item for item in ranked if _display_score(item.score) >= args.min_score
+    ][: args.top]
 
     renderer = format_json if args.format == "json" else format_table
     try:

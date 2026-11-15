@@ -8,6 +8,7 @@ from unittest import mock
 
 from driftwood import cli
 from driftwood.gitlog import FileChurn, GitError
+from driftwood.scoring import Hotspot
 
 
 def _churn():
@@ -79,6 +80,36 @@ class CliTests(unittest.TestCase):
         payload = json.loads(out)
         self.assertEqual(code, 0)
         self.assertEqual([item["path"] for item in payload["hotspots"]], ["hot/a.py", "warm/b.py"])
+
+    def test_display_score_matches_table_column(self):
+        self.assertEqual(cli._display_score(0.2996), 0.3)
+        self.assertEqual(cli._display_score(0.0004), 0.0)
+
+    def test_min_score_keeps_row_that_displays_above_threshold(self):
+        # score 0.2996 renders as "0.300"; --min-score 0.3 must keep it,
+        # otherwise the user sees a 0.300 row vanish under a 0.3 threshold.
+        ranked = [
+            Hotspot(
+                path="edge/a.py", commits=2, added=2, deleted=0, churn=2,
+                complexity=2, score=0.2996,
+            ),
+            Hotspot(
+                path="low/b.py", commits=1, added=1, deleted=0, churn=1,
+                complexity=0, score=0.2,
+            ),
+        ]
+        output = io.StringIO()
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", return_value={}):
+                    with mock.patch.object(cli, "rank_hotspots", return_value=ranked):
+                        with contextlib.redirect_stdout(output):
+                            code = cli.main(
+                                ["repo", "--format", "json", "--min-score", "0.3"]
+                            )
+        payload = json.loads(output.getvalue())
+        self.assertEqual(code, 0)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["edge/a.py"])
 
     def test_include_match_is_case_sensitive(self):
         self.assertTrue(cli._matches("src/app.py", ["src/*"], []))
