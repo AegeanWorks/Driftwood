@@ -8,9 +8,9 @@
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `14`
 - **Total Classes**: `19`
-- **Total Top-Level Functions**: `35`
-- **Total Class Methods**: `103`
-- **Total Source Lines**: `1819`
+- **Total Top-Level Functions**: `36`
+- **Total Class Methods**: `106`
+- **Total Source Lines**: `1846`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -92,12 +92,13 @@
 ### [`driftwood/report.py`](driftwood/report.py)
 > *Render ranked hotspots as a fixed-width table or JSON.*
 
-**Size**: `105` lines (`3658` bytes)
+**Size**: `117` lines (`4105` bytes)
 
 **Functions:**
 - `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control and line-separator characters.*
 - `def _row(index, item)`
 - `def format_table(hotspots)` - *Render an aligned, header-first table; paths stay at the end to avoid wrapping.*
+- `def _csv_safe_cell(text)` - *Neutralize spreadsheet formula interpretation of a leading character.*
 - `def format_csv(hotspots)` - *Render hotspots as CSV, one row per hotspot, header always present.*
 - `def format_json(hotspots)` - *Render hotspots as stable JSON for scripting.*
 
@@ -244,7 +245,7 @@
 ---
 
 ### [`tests/test_report.py`](tests/test_report.py)
-**Size**: `120` lines (`4710` bytes)
+**Size**: `135` lines (`5383` bytes)
 
 **Classes:**
 - `class FormatTableTests`
@@ -265,6 +266,9 @@
   - Method `.test_comma_path_is_quoted_as_one_cell()`
   - Method `.test_control_and_bidi_chars_sanitized()`
   - Method `.test_score_matches_table_display_precision()`
+  - Method `.test_formula_leading_paths_get_tick_guard()`
+  - Method `.test_normal_path_gets_no_tick()`
+  - Method `.test_no_trailing_blank_line()`
 
 ---
 

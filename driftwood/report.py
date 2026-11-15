@@ -66,12 +66,24 @@ def format_table(hotspots: Sequence[Hotspot]) -> str:
     return "\n".join(lines)
 
 
+_CSV_FORMULA_PREFIXES = ("=", "+", "-", "@", "\t")
+
+
+def _csv_safe_cell(text: str) -> str:
+    """Neutralize spreadsheet formula interpretation of a leading character."""
+    if text.startswith(_CSV_FORMULA_PREFIXES):
+        return "'" + text
+    return text
+
+
 def format_csv(hotspots: Sequence[Hotspot]) -> str:
     """Render hotspots as CSV, one row per hotspot, header always present.
 
     Score uses the table's 3-decimal display precision; the CSV writer quotes
-    cells that contain separators or newlines, and paths still go through
-    ``_sanitize_path`` so one hotspot stays one row.
+    cells that contain separators or newlines, and a leading ``'`` guards
+    spread-processing against formula interpretation of repo paths. Paths
+    still pass ``_sanitize_path`` so one hotspot stays one row, and no
+    trailing newline is emitted (matching the other renderers).
     """
     buffer = io.StringIO()
     writer = csv.writer(buffer, lineterminator="\n")
@@ -85,10 +97,10 @@ def format_csv(hotspots: Sequence[Hotspot]) -> str:
                 item.commits,
                 item.added,
                 item.deleted,
-                _sanitize_path(item.path),
+                _csv_safe_cell(_sanitize_path(item.path)),
             )
         )
-    return buffer.getvalue()
+    return buffer.getvalue().rstrip("\n")
 
 
 def format_json(hotspots: Sequence[Hotspot]) -> str:

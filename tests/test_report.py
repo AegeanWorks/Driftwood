@@ -115,6 +115,21 @@ class FormatCsvTests(unittest.TestCase):
         rows = self._rows(format_csv([Hotspot("a.py", 1, 1, 0, 1, 1, 0.2996)]))
         self.assertEqual(rows[1][0], "0.300")
 
+    def test_formula_leading_paths_get_tick_guard(self):
+        for path in ("=cmd|' /C calc'!A0.py", "+shell.py", "-dash.py", "@x.py"):
+            with self.subTest(path=path):
+                raw = format_csv([Hotspot(path, 1, 1, 0, 1, 1, 0.5)])
+                cell = self._rows(raw)[1][6]
+                self.assertTrue(cell.startswith("'"), cell)
+
+    def test_normal_path_gets_no_tick(self):
+        raw = format_csv([Hotspot("src/app.py", 1, 1, 0, 1, 1, 0.5)])
+        self.assertEqual(self._rows(raw)[1][6], "src/app.py")
+
+    def test_no_trailing_blank_line(self):
+        raw = format_csv(SAMPLE)
+        self.assertFalse(raw.endswith("\n"), repr(raw[-10:]))
+
 
 if __name__ == "__main__":
     unittest.main()
