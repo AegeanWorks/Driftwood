@@ -1,6 +1,7 @@
 import contextlib
 import io
 import json
+import os
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -52,6 +53,12 @@ class CliTests(unittest.TestCase):
         payload = json.loads(out)
         self.assertEqual(code, 0)
         self.assertEqual([item["path"] for item in payload["hotspots"]], ["src/app.py"])
+
+    def test_empty_include_keeps_all_paths(self):
+        code, out, _ = self._run(["repo", "--format", "json", "--include", ""])
+        payload = json.loads(out)
+        self.assertEqual(code, 0)
+        self.assertEqual(payload["count"], 2)
 
     def test_git_error_returns_one_with_remediation(self):
         code, out, err = self._run(["repo"], error=GitError("Why: nope\nFix: retry"))
@@ -145,8 +152,36 @@ class CliTests(unittest.TestCase):
             with mock.patch.object(cli, "collect_churn", return_value=_churn()):
                 with mock.patch.object(cli, "complexity_map", return_value={"a": 1}):
                     with mock.patch("builtins.print", side_effect=BrokenPipeError(32, "Broken pipe")):
-                        code = cli.main(["repo"])
+                        with contextlib.redirect_stdout(io.StringIO()):
+                            code = cli.main(["repo"])
         self.assertEqual(code, 0)
+
+    def test_broken_pipe_on_real_fd_redirects_to_devnull(self):
+        read_fd, write_fd = os.pipe()
+        stream = os.fdopen(write_fd, "w", encoding="utf-8")
+        self.addCleanup(stream.close)
+        self.addCleanup(os.close, read_fd)
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value=_churn()):
+                with mock.patch.object(cli, "complexity_map", return_value={"a": 1}):
+                    with mock.patch("builtins.print", side_effect=BrokenPipeError(32, "Broken pipe")):
+                        with contextlib.redirect_stdout(stream):
+                            code = cli.main(["repo"])
+        self.assertEqual(code, 0)
+        # the fd survives: writes go to devnull instead of raising again
+        stream.write("swallowed")
+        stream.flush()
+
+    def test_broken_pipe_does_not_close_stdout(self):
+        output = io.StringIO()
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value=_churn()):
+                with mock.patch.object(cli, "complexity_map", return_value={"a": 1}):
+                    with mock.patch("builtins.print", side_effect=BrokenPipeError(32, "Broken pipe")):
+                        with contextlib.redirect_stdout(output):
+                            code = cli.main(["repo"])
+        self.assertEqual(code, 0)
+        output.write("still usable")
 
     def test_blank_since_returns_two_without_traceback(self):
         with mock.patch.object(cli, "repo_root", return_value=Path(".")):

@@ -1,7 +1,7 @@
 # Codebase Map & Symbol Catalog 🗺️
 
 > **AUTO-GENERATED & VERIFIED BY `scripts/update_knowledge_base.py`**
-> This document provides an automated, up-to-date registry of all modules, classes, and exported functions across this repository.
+> This document catalogues Python modules, classes, and exported functions. See Map Coverage for any stack it does not index.
 
 ---
 
@@ -9,8 +9,12 @@
 - **Total Python Modules**: `14`
 - **Total Classes**: `15`
 - **Total Top-Level Functions**: `25`
-- **Total Class Methods**: `74`
-- **Total Source Lines**: `1290`
+- **Total Class Methods**: `77`
+- **Total Source Lines**: `1329`
+
+## 🧭 Map Coverage
+- **Indexed**: python (`14` module(s))
+- **Not indexed by this map**: none (no non-Python source files were found)
 
 ---
 
@@ -31,7 +35,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `132` lines (`4262` bytes)
+**Size**: `136` lines (`4545` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -110,7 +114,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `162` lines (`6998` bytes)
+**Size**: `197` lines (`8820` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -119,6 +123,7 @@
   - Method `.test_json_output()`
   - Method `.test_exclude_filter_drops_paths()`
   - Method `.test_include_filter_keeps_matching_paths()`
+  - Method `.test_empty_include_keeps_all_paths()`
   - Method `.test_git_error_returns_one_with_remediation()`
   - Method `.test_min_score_filters_before_top_slices()`
   - Method `.test_include_match_is_case_sensitive()`
@@ -128,6 +133,8 @@
   - Method `.test_repo_root_git_error_returns_one()`
   - Method `.test_file_arg_uses_parent_dir()`
   - Method `.test_broken_pipe_does_not_raise()`
+  - Method `.test_broken_pipe_on_real_fd_redirects_to_devnull()`
+  - Method `.test_broken_pipe_does_not_close_stdout()`
   - Method `.test_blank_since_returns_two_without_traceback()`
 
 **Functions:**

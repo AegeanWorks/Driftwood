@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import os
 import sys
 from pathlib import Path
 from typing import Sequence
@@ -104,7 +105,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"driftwood: invalid argument: {exc}", file=sys.stderr)
         return 2
 
-    include = args.include or []
+    include = [pattern for pattern in (args.include or []) if pattern]
     exclude = args.exclude or []
     selected = {
         path: stat
@@ -119,10 +120,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         print(renderer(shown))
     except BrokenPipeError:
-        # hygiene: allow silent broken-pipe exit for `| head` usability
+        # hygiene: allow silent broken-pipe exit for `| head` usability; redirect
+        # the fd instead of closing the shared stdout object that hosts capture
         try:
-            sys.stdout.close()
-        except OSError:  # hygiene: allow close may fail on dead pipe
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, sys.stdout.fileno())
+            os.close(devnull)
+        except OSError:  # hygiene: allow silent-except: capture-host streams and dead fds have no log channel
             pass
         return 0
     return 0
