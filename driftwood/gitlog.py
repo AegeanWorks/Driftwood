@@ -171,6 +171,19 @@ def parse_numstat(text: str) -> dict[str, FileChurn]:
     return churn
 
 
+def list_worktree_files(repo: Path, runner: Runner = _run_git) -> list[str]:
+    """List tracked plus untracked-but-not-ignored files, NUL-safe.
+
+    ``ls-files --exclude-standard`` respects ``.gitignore``, so vendored or
+    build trees never enter the report; entries keep git's forward slashes.
+    """
+    raw = runner(
+        Path(repo),
+        ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+    )
+    return [entry for entry in raw.split("\0") if entry]
+
+
 def collect_churn(
     repo: Path,
     *,

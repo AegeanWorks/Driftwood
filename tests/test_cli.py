@@ -266,6 +266,27 @@ class CliTests(unittest.TestCase):
         self.assertIsNotNone(seen["deadline"])
         self.assertIsNone(gitlog.session_deadline())
 
+    def test_all_adds_zero_churn_files_ranked_by_complexity(self):
+        output = io.StringIO()
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value={"old.py": FileChurn(commits=2, added=10, deleted=0)}):
+                with mock.patch.object(cli, "list_worktree_files", return_value=["old.py", "new.py"]):
+                    with mock.patch.object(cli, "complexity_map", return_value={"new.py": 7}):
+                        with contextlib.redirect_stdout(output):
+                            code = cli.main(["repo", "--format", "json", "--all"])
+        payload = json.loads(output.getvalue())
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            [item["path"] for item in payload["hotspots"]], ["old.py", "new.py"]
+        )
+        self.assertEqual(payload["hotspots"][1]["commits"], 0)
+        self.assertEqual(payload["hotspots"][1]["churn"], 0)
+
+    def test_all_off_by_default(self):
+        code, out, _ = self._run(["repo", "--format", "json"])
+        payload = json.loads(out)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["src/app.py", "docs/readme.md"])
+
     def test_since_accepts_documented_forms(self):
         parser = cli.build_parser()
         for value in (

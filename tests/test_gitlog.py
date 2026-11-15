@@ -10,6 +10,7 @@ from driftwood.gitlog import (
     GitError,
     collect_churn,
     git_session,
+    list_worktree_files,
     normalize_path,
     parse_numstat,
     repo_root,
@@ -32,6 +33,29 @@ class _FakeClock:
 
     def monotonic(self):
         return self.value
+
+
+class ListWorktreeFilesTests(unittest.TestCase):
+    def test_splits_nul_separated_entries_and_drops_empties(self):
+        raw = "a.py\0dir/b.py\0\0"
+        files = list_worktree_files(Path("repo"), runner=lambda *_: raw)
+        self.assertEqual(files, ["a.py", "dir/b.py"])
+
+    def test_asks_git_for_tracked_plus_untracked_respecting_gitignore(self):
+        calls = []
+
+        def runner(repo, args):
+            calls.append(args)
+            return ""
+
+        list_worktree_files(Path("repo"), runner=runner)
+        self.assertEqual(
+            calls,
+            [["ls-files", "--cached", "--others", "--exclude-standard", "-z"]],
+        )
+
+    def test_empty_output_is_empty_list(self):
+        self.assertEqual(list_worktree_files(Path("repo"), runner=lambda *_: ""), [])
 
 
 class GitTimeoutBudgetTests(unittest.TestCase):

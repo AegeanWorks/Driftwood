@@ -18,6 +18,7 @@ from driftwood.gitlog import (
     GitError,
     collect_churn,
     git_session,
+    list_worktree_files,
     repo_root,
 )
 from driftwood.report import format_csv, format_json, format_table
@@ -142,6 +143,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="hide rows below this score as displayed (3 decimals, applied before --top)",
     )
     parser.add_argument(
+        "--all",
+        action="store_true",
+        help="also include files with no commit history (tracked or untracked, "
+        "respecting .gitignore); they rank by complexity alone",
+    )
+    parser.add_argument(
         "--group-by",
         choices=("dir",),
         default=None,
@@ -219,6 +226,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         for path, stat in churn.items()
         if _matches(path, include, exclude)
     }
+    if args.all:
+        for path in list_worktree_files(root):
+            if _matches(path, include, exclude):
+                selected.setdefault(path, FileChurn())
     complexity = complexity_map(root, sorted(selected))
     if args.group_by == "dir":
         grouped_churn, complexity = _group_by_dir(selected, complexity)
