@@ -1,11 +1,11 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "gap-fixes-2",
+    "task_id": "hotspot-ergonomics-1",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1794763414.5117147,
+    "updated_at": 1794763942.8595033,
     "owner": "vibe:1",
     "started_by": "vibe:1",
     "continuations": [],
@@ -15,106 +15,11 @@
         "path": "projects/driftwood"
       }
     ],
-    "completed_at": 1794763415.033868,
-    "completed_head": "f5387178f057703d761e714af2de3733b0a305bd",
-    "completed_tree": "80d2f5d6a0579f341f1abeb1c5d9f88da27fc5a6"
+    "completed_at": 1794763943.2734241,
+    "completed_head": "992dcbe4bd7d52bfb05b1845e2f27d72352c6f66",
+    "completed_tree": "f4cc483de139b96b927f60a0ad26890782358050"
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 4",
-      "phase_num": 3,
-      "description": "Reforge stage 4: window 6, 1 commit(s), 0 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "completed",
-      "timestamp": 1793292057.9415653,
-      "timestamp_str": "2026-10-29 19:40:57",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-2",
-      "phase": "reforge run",
-      "phase_num": 3,
-      "description": "run started (start=6, step=1, stop=6)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793292177.190689,
-      "timestamp_str": "2026-10-29 19:42:57",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-2",
-      "phase": "reforge stage 1",
-      "phase_num": 3,
-      "description": "Reforge stage 1: window 6, 6 commit(s), 25 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "completed",
-      "timestamp": 1793292195.5226562,
-      "timestamp_str": "2026-10-29 19:43:15",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "driftwood-stdout-include-fixes",
-      "phase": "in_progress",
-      "phase_num": 2,
-      "description": "[1/2] Plan: fix broken-pipe stdout poisoning and empty --include contract",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794759589.0713837,
-      "timestamp_str": "2026-11-15 19:19:49",
-      "agent": "vibe:1",
-      "impact_assessment": {
-        "why": "Findings 1-2 from the post-push analysis: cli.main closes the shared sys.stdout on BrokenPipeError, poisoning pytest capture and any in-process host; --include '' drops every path while the help text promises empty keeps all",
-        "benefits": "Full suite runs green without deselect; pipe-to-head UX kept; documented include contract honoured",
-        "risks": "contract: exit code and silent broken-pipe exit must stay 0; dependency: none (os module only); concurrency: none, single process; state: none, handler is stateless",
-        "mitigation": "failing-first tests for both behaviours, io.UnsupportedOperation is an OSError subclass so capture hosts skip the dup2 safely, gates before commit"
-      },
-      "plan_digest": "9696fd01d3874948f94e95b09163074c8f5a1d9cd1c8187dc909db13a8ca89d6"
-    },
-    {
-      "task_id": "driftwood-stdout-include-fixes",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[2/2] Verified: full suite 71 passed, 1 skipped, 5 subtests in both capture modes; aikit check driftwood 4/4 gates; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794759839.5735075,
-      "timestamp_str": "2026-11-15 19:23:59",
-      "agent": "vibe:1",
-      "impact_assessment": {
-        "why": "Real behaviour-coverage for broken pipe and empty include; suite is no longer poisoned under pytest capture",
-        "benefits": "test-in-host safety, documented include contract honoured, silent HS exit kept",
-        "risks": "contract: exit 0 on broken pipe unchanged; dependency: os stdlib only; concurrency: none; state: none",
-        "mitigation": "failing-first tests + real-fd coverage; gates green before commit"
-      }
-    },
-    {
-      "task_id": "driftwood-stdout-include-fixes",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'driftwood-stdout-include-fixes' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794759886.4612255,
-      "timestamp_str": "2026-11-15 19:24:46",
-      "agent": "vibe:1",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
-    {
-      "task_id": "reforge:run-3",
-      "phase": "reforge run",
-      "phase_num": 3,
-      "description": "run started (start=16, step=3, stop=16)",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794760946.7557294,
-      "timestamp_str": "2026-11-15 19:42:26",
-      "agent": "unidentified"
-    },
     {
       "task_id": "reforge:run-3",
       "phase": "reforge stage 1",
@@ -319,6 +224,133 @@
       "status": "completed",
       "timestamp": 1794763415.082575,
       "timestamp_str": "2026-11-15 20:23:35",
+      "agent": "vibe:1",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[3/3] Plan: --format csv, --group-by dir, --all zero-churn inclusion",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763523.6211426,
+      "timestamp_str": "2026-11-15 20:25:23",
+      "agent": "vibe:1",
+      "impact_assessment": {
+        "why": "Recorded improvement backlog from the verification passes: output is limited to table/json, grouping by directory requires external scripting, and files with no commit history are invisible in the report even though their complexity makes them risk material",
+        "benefits": "CSV gives scriptable spreadsheet-compatible output; dir grouping answers 'which area churns' directly; --all surfaces new uncommitted files whose complexity is invisible today",
+        "risks": "contract: --format gains a choice and two new flags, all additive; CSV score column follows the 3-decimal display precision (WYSIWYG) while JSON keeps stored precision; --all can produce large tables (bounded by --top); grouping semantics: top-level files group as '.', aggregation is additive sums before ranking",
+        "mitigation": "each feature is one milestone with failing-first tests; reuse rank_hotspots for grouped scoring so tie-breaking and drop rules stay single-sourced; ls-files --exclude-standard respects .gitignore; README updated same commit per milestone"
+      },
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[1/3] csv committed 7c8f07a: 87 tests pass incl. 5 new format_csv tests; real CLI csv smoke renders header+rows; checklists passed via --allow-dirty gates before commit",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763680.8555617,
+      "timestamp_str": "2026-11-15 20:28:00",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/3] starting --group-by dir: additive aggregation (commits count file-commit pairs) then rank_hotspots on dir-level entities",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763681.3829157,
+      "timestamp_str": "2026-11-15 20:28:01",
+      "agent": "vibe:1",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/3] group-by committed ecdd951: 90 tests pass (first run caught commits-count bug: files-touched vs file-commit pairs), real dir-grouping smoke renders .aikit/driftwood/tests rows; checklists passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763828.8593066,
+      "timestamp_str": "2026-11-15 20:30:28",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] starting --all: git ls-files --cached --others --exclude-standard feeds zero-churn entries so never-committed files rank by complexity",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763829.4159877,
+      "timestamp_str": "2026-11-15 20:30:29",
+      "agent": "vibe:1",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] --all committed 992dcbe: tests 95 pass; checklists: passed (all three milestones 7c8f07a, ecdd951, 992dcbe ran --allow-dirty gates 4/4 before their commits; README updated per milestone; codebase map regenerated)",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794763942.8595033,
+      "timestamp_str": "2026-11-15 20:32:22",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "hotspot-ergonomics-1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'hotspot-ergonomics-1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794763943.3157513,
+      "timestamp_str": "2026-11-15 20:32:23",
       "agent": "vibe:1",
       "delivery": {
         "roots": [
