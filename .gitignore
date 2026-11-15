@@ -4,6 +4,7 @@
 .aikit/*.tmp_*
 .aikit/*.corrupt_*
 .aikit/reforge.reviews/
+.aikit/task_ledger_archive.jsonl
 __pycache__/
 *.py[cod]
 node_modules/
