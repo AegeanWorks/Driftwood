@@ -9,8 +9,8 @@
 - **Total Python Modules**: `14`
 - **Total Classes**: `19`
 - **Total Top-Level Functions**: `36`
-- **Total Class Methods**: `106`
-- **Total Source Lines**: `1846`
+- **Total Class Methods**: `107`
+- **Total Source Lines**: `1880`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -35,7 +35,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `263` lines (`9060` bytes)
+**Size**: `265` lines (`9161` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -53,7 +53,7 @@
 ### [`driftwood/complexity.py`](driftwood/complexity.py)
 > *Language-aware complexity estimates that need only the standard library.*
 
-**Size**: `104` lines (`2796` bytes)
+**Size**: `114` lines (`3346` bytes)
 
 **Functions:**
 - `def python_complexity(source)` - *Cyclomatic-style count for Python: 1 + decision points (bounded by source size).*
@@ -124,7 +124,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `353` lines (`15571` bytes)
+**Size**: `375` lines (`16748` bytes)
 
 **Classes:**
 - `class CliTests`
@@ -152,6 +152,7 @@
   - Method `.test_broken_pipe_does_not_close_stdout()`
   - Method `.test_main_runs_git_inside_budget_session()`
   - Method `.test_all_adds_zero_churn_files_ranked_by_complexity()`
+  - Method `.test_all_restricted_to_code_files()`
   - Method `.test_all_off_by_default()`
   - Method `.test_since_accepts_documented_forms()`
   - Method `.test_since_rejects_approxidate_garbage()`

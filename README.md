@@ -61,7 +61,7 @@ Complexity is deliberately a cheap heuristic, not a linter: it counts decision p
 | `--include GLOB` / `--exclude GLOB` | Repeatable case-sensitive path filters (`*` also spans `/`) |
 | `--min-score <f>` | Hide rows whose displayed score (3 decimals) is below this, applied before `--top` |
 | `--group-by dir` | Aggregate churn and complexity per directory, then rank directories; top-level files group as `.`, and a commit touching three files in one dir adds three commits (file-commit pairs) |
-| `--all` | Also include files with no commit history (tracked or untracked, `.gitignore` respected); they rank by complexity alone |
+| `--all` | Also include code files (`.py`, `.js`, `.ts`, `.c`, `.java`, ...) with no commit history (tracked or untracked, `.gitignore` respected); they rank by complexity alone. Uncommitted prose and data files are not a hotspot signal and are skipped |
 
 Numeric flags are validated up front: `--top` and `--commits` need a positive integer, `--min-score` needs a non-negative number, and a rejected value exits `2` with usage instead of a stack trace.
 

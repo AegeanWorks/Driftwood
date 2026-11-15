@@ -12,7 +12,7 @@ from pathlib import Path, PurePosixPath
 from typing import Sequence
 
 from driftwood import __version__
-from driftwood.complexity import complexity_map
+from driftwood.complexity import CODE_SUFFIXES, complexity_map
 from driftwood.gitlog import (
     FileChurn,
     GitError,
@@ -228,7 +228,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     if args.all:
         for path in list_worktree_files(root):
-            if _matches(path, include, exclude):
+            if PurePosixPath(path).suffix.lower() in CODE_SUFFIXES and _matches(
+                path, include, exclude
+            ):
                 selected.setdefault(path, FileChurn())
     complexity = complexity_map(root, sorted(selected))
     if args.group_by == "dir":

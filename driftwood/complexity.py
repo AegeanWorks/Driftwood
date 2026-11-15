@@ -7,6 +7,16 @@ import tokenize
 from pathlib import Path
 
 PYTHON_SUFFIXES = {".py", ".pyi"}
+# Files whose generic branching markers mean something structural. Outside
+# this set, prose and data formats score complexity 0 when they have no
+# churn history (`--all`): branching words in legal or README text are noise.
+CODE_SUFFIXES = PYTHON_SUFFIXES | {
+    ".js", ".mjs", ".cjs", ".jsx", ".ts", ".tsx",
+    ".c", ".h", ".cc", ".cpp", ".hpp", ".cxx",
+    ".java", ".kt", ".kts", ".scala", ".swift", ".go", ".rs",
+    ".rb", ".php", ".cs", ".dart", ".lua", ".m", ".mm", ".vue", ".svelte",
+    ".sh", ".bash", ".zsh", ".ps1", ".psm1", ".sql",
+}
 DECISION_KEYWORDS = {
     "if",
     "elif",

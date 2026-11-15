@@ -282,6 +282,28 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["hotspots"][1]["commits"], 0)
         self.assertEqual(payload["hotspots"][1]["churn"], 0)
 
+    def test_all_restricted_to_code_files(self):
+        # never-committed prose/data files carry no structural signal; only
+        # code suffixes enter --all selection, even with a tempting complexity.
+        output = io.StringIO()
+        seen_paths = {}
+
+        def fake_map(root, paths):
+            seen_paths.update({path: True for path in paths})
+            return {"draft.md": 99, "new.py": 5}
+
+        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
+            with mock.patch.object(cli, "collect_churn", return_value={}):
+                with mock.patch.object(cli, "complexity_map", side_effect=fake_map):
+                    with mock.patch.object(cli, "list_worktree_files", return_value=["draft.md", "new.py", "Makefile"]):
+                        with contextlib.redirect_stdout(output):
+                            code = cli.main(["repo", "--format", "json", "--all"])
+        payload = json.loads(output.getvalue())
+        self.assertEqual(code, 0)
+        self.assertEqual([item["path"] for item in payload["hotspots"]], ["new.py"])
+        self.assertNotIn("draft.md", seen_paths)
+        self.assertNotIn("Makefile", seen_paths)
+
     def test_all_off_by_default(self):
         code, out, _ = self._run(["repo", "--format", "json"])
         payload = json.loads(out)
