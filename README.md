@@ -8,6 +8,8 @@
 
 Offline CLI that ranks code hotspots by combining git churn history with file complexity, so maintainers know where refactoring pays off.
 
+> **Archived**: Delivered and fully audited; driftwood hotspots CLI stable after reforge run-4 (archived 2026-11-15). This project is read-only; its GitHub repository is archived.
+
 ## ⚡ 30-Second Cold-Start Quick Reference
 
 - **Runtime Prerequisites**: Python 3.10+ and git 2.20+ (already used by the repository you analyze). No third-party packages.

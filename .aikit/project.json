@@ -22,5 +22,11 @@
     "driftwood/cli.py"
   ],
   "ui_checked_at": "2026-11-05",
-  "ui_source": "detected"
+  "ui_source": "detected",
+  "archived": true,
+  "archived_at": "2026-11-15",
+  "archive_reason": "Delivered and fully audited; driftwood hotspots CLI stable after reforge run-4",
+  "archive_repo": "AegeanWorks/Driftwood",
+  "archive_description": "[ARCHIVED] Offline CLI that ranks code hotspots by combining git churn history with file complexity, so maintainers know where refactoring pays off.",
+  "archive_origin": "projects/driftwood"
 }
