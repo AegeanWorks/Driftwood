@@ -57,7 +57,7 @@ Complexity is deliberately a cheap heuristic, not a linter: it counts decision p
 | `--since <date>` | Git date filter: `12.months.ago` (also spaced: `2 weeks ago`), `2024-01-15` (ISO), `@epoch`, `now`, `yesterday`, `last monday`; anything else exits `2` because git would silently parse it as `now` |
 | `--commits <n>` | Only the newest `n` commits |
 | `--top <n>` | Rows to print (default: 20) |
-| `--format table\|json` | Human table or scriptable JSON |
+| `--format table\|json\|csv` | Human table, scriptable JSON (stored 4-decimal scores), or CSV (3-decimal scores, header always present) |
 | `--include GLOB` / `--exclude GLOB` | Repeatable case-sensitive path filters (`*` also spans `/`) |
 | `--min-score <f>` | Hide rows whose displayed score (3 decimals) is below this, applied before `--top` |
 

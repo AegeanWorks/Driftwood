@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import csv
+import io
 import json
 from dataclasses import asdict
 from typing import Sequence
@@ -9,6 +11,7 @@ from typing import Sequence
 from driftwood.scoring import Hotspot
 
 HEADER = ("#", "Score", "Churn", "Cplx", "Commits", "File")
+CSV_HEADER = ("score", "churn", "complexity", "commits", "added", "deleted", "path")
 MAX_TABLE_PATH = 120
 
 
@@ -61,6 +64,31 @@ def format_table(hotspots: Sequence[Hotspot]) -> str:
         ]
         lines.append(f"{'  '.join(cells)}  {row[-1]}")
     return "\n".join(lines)
+
+
+def format_csv(hotspots: Sequence[Hotspot]) -> str:
+    """Render hotspots as CSV, one row per hotspot, header always present.
+
+    Score uses the table's 3-decimal display precision; the CSV writer quotes
+    cells that contain separators or newlines, and paths still go through
+    ``_sanitize_path`` so one hotspot stays one row.
+    """
+    buffer = io.StringIO()
+    writer = csv.writer(buffer, lineterminator="\n")
+    writer.writerow(CSV_HEADER)
+    for item in hotspots:
+        writer.writerow(
+            (
+                f"{item.score:.3f}",
+                item.churn,
+                item.complexity,
+                item.commits,
+                item.added,
+                item.deleted,
+                _sanitize_path(item.path),
+            )
+        )
+    return buffer.getvalue()
 
 
 def format_json(hotspots: Sequence[Hotspot]) -> str:

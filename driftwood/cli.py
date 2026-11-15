@@ -14,7 +14,7 @@ from typing import Sequence
 from driftwood import __version__
 from driftwood.complexity import complexity_map
 from driftwood.gitlog import GitError, collect_churn, git_session, repo_root
-from driftwood.report import format_json, format_table
+from driftwood.report import format_csv, format_json, format_table
 from driftwood.scoring import rank_hotspots
 
 
@@ -113,7 +113,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--top", type=_positive_int, default=20, help="rows to show (default: 20)"
     )
     parser.add_argument(
-        "--format", choices=("table", "json"), default="table", help="output format"
+        "--format", choices=("table", "json", "csv"), default="table", help="output format"
     )
     parser.add_argument(
         "--include",
@@ -188,7 +188,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         item for item in ranked if _display_score(item.score) >= args.min_score
     ][: args.top]
 
-    renderer = format_json if args.format == "json" else format_table
+    renderer = {
+        "json": format_json,
+        "csv": format_csv,
+    }.get(args.format, format_table)
     try:
         print(renderer(shown))
     except BrokenPipeError:

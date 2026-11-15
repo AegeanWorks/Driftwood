@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `14`
-- **Total Classes**: `17`
-- **Total Top-Level Functions**: `32`
-- **Total Class Methods**: `89`
-- **Total Source Lines**: `1605`
+- **Total Classes**: `18`
+- **Total Top-Level Functions**: `33`
+- **Total Class Methods**: `95`
+- **Total Source Lines**: `1670`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -35,7 +35,7 @@
 ### [`driftwood/cli.py`](driftwood/cli.py)
 > *Command-line entry point for the driftwood hotspot report.*
 
-**Size**: `208` lines (`7179` bytes)
+**Size**: `211` lines (`7238` bytes)
 
 **Functions:**
 - `def _positive_int(raw)`
@@ -90,12 +90,13 @@
 ### [`driftwood/report.py`](driftwood/report.py)
 > *Render ranked hotspots as a fixed-width table or JSON.*
 
-**Size**: `77` lines (`2750` bytes)
+**Size**: `105` lines (`3658` bytes)
 
 **Functions:**
 - `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control and line-separator characters.*
 - `def _row(index, item)`
 - `def format_table(hotspots)` - *Render an aligned, header-first table; paths stay at the end to avoid wrapping.*
+- `def format_csv(hotspots)` - *Render hotspots as CSV, one row per hotspot, header always present.*
 - `def format_json(hotspots)` - *Render hotspots as stable JSON for scripting.*
 
 ---
@@ -232,7 +233,7 @@
 ---
 
 ### [`tests/test_report.py`](tests/test_report.py)
-**Size**: `86` lines (`3323` bytes)
+**Size**: `120` lines (`4710` bytes)
 
 **Classes:**
 - `class FormatTableTests`
@@ -246,6 +247,13 @@
   - Method `.test_json_preserves_unicode_and_rejects_nan()`
 - `class FormatJsonTests`
   - Method `.test_payload_is_stable_and_parseable()`
+- `class FormatCsvTests`
+  - Method `._rows(raw)`
+  - Method `.test_header_and_data_rows()`
+  - Method `.test_empty_input_is_header_only()`
+  - Method `.test_comma_path_is_quoted_as_one_cell()`
+  - Method `.test_control_and_bidi_chars_sanitized()`
+  - Method `.test_score_matches_table_display_precision()`
 
 ---
 

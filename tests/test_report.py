@@ -1,7 +1,9 @@
+import csv
+import io
 import json
 import unittest
 
-from driftwood.report import format_json, format_table
+from driftwood.report import format_csv, format_json, format_table
 from driftwood.scoring import Hotspot
 
 SAMPLE = [
@@ -80,6 +82,38 @@ class FormatJsonTests(unittest.TestCase):
         self.assertEqual(payload["count"], 2)
         self.assertEqual(payload["hotspots"][0]["path"], "src/app.py")
         self.assertEqual(payload["hotspots"][0]["score"], 1.0)
+
+
+class FormatCsvTests(unittest.TestCase):
+    def _rows(self, raw):
+        return list(csv.reader(io.StringIO(raw)))
+
+    def test_header_and_data_rows(self):
+        rows = self._rows(format_csv(SAMPLE))
+        self.assertEqual(rows[0], ["score", "churn", "complexity", "commits", "added", "deleted", "path"])
+        self.assertEqual(rows[1][6], "src/app.py")
+        self.assertEqual(rows[1][0], "1.000")
+        self.assertEqual(rows[2][0], "0.200")
+
+    def test_empty_input_is_header_only(self):
+        rows = self._rows(format_csv([]))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][0], "score")
+
+    def test_comma_path_is_quoted_as_one_cell(self):
+        evil = Hotspot("src/a,b.py", commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5)
+        rows = self._rows(format_csv([evil]))
+        self.assertEqual(rows[1][6], "src/a,b.py")
+
+    def test_control_and_bidi_chars_sanitized(self):
+        evil = Hotspot("a\nb\u202ec.py", commits=1, added=1, deleted=0, churn=1, complexity=1, score=0.5)
+        raw = format_csv([evil])
+        self.assertEqual(len(raw.splitlines()), 2)
+        self.assertNotIn("\u202e", raw)
+
+    def test_score_matches_table_display_precision(self):
+        rows = self._rows(format_csv([Hotspot("a.py", 1, 1, 0, 1, 1, 0.2996)]))
+        self.assertEqual(rows[1][0], "0.300")
 
 
 if __name__ == "__main__":
