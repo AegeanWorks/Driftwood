@@ -14,7 +14,7 @@ MAX_TABLE_PATH = 120
 
 def _sanitize_path(path: str) -> str:
     """Keep one-hotspot-one-line: replace control and line-separator characters."""
-    extra_breaks = {"\x85", "\u2028", "\u2029"}
+    extra_breaks = {"\x85", "\u2028", "\u2029", "\u200b", "\u200e", "\u200f", "\u202a", "\u202b", "\u202c", "\u202d", "\u202e"}
     clean = "".join(
         "?" if ord(char) < 32 or ord(char) == 127 or char in extra_breaks else char
         for char in path

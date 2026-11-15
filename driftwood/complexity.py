@@ -97,7 +97,7 @@ def complexity_map(root: Path, paths: list[str]) -> dict[str, int]:
         if Path(rel).is_absolute() or ".." in parts:
             continue
         candidate = root / rel
-        if candidate.is_symlink():
+        if candidate.is_symlink() or not candidate.resolve().is_relative_to(root.resolve()):
             continue
         if candidate.is_file():
             result[rel] = file_complexity(candidate)

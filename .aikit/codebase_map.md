@@ -10,7 +10,7 @@
 - **Total Classes**: `15`
 - **Total Top-Level Functions**: `25`
 - **Total Class Methods**: `77`
-- **Total Source Lines**: `1329`
+- **Total Source Lines**: `1324`
 
 ## 🧭 Map Coverage
 - **Indexed**: python (`14` module(s))
@@ -49,7 +49,7 @@
 ### [`driftwood/complexity.py`](driftwood/complexity.py)
 > *Language-aware complexity estimates that need only the standard library.*
 
-**Size**: `104` lines (`2738` bytes)
+**Size**: `104` lines (`2796` bytes)
 
 **Functions:**
 - `def python_complexity(source)` - *Cyclomatic-style count for Python: 1 + decision points (bounded by source size).*
@@ -84,7 +84,7 @@
 ### [`driftwood/report.py`](driftwood/report.py)
 > *Render ranked hotspots as a fixed-width table or JSON.*
 
-**Size**: `77` lines (`2670` bytes)
+**Size**: `77` lines (`2750` bytes)
 
 **Functions:**
 - `def _sanitize_path(path)` - *Keep one-hotspot-one-line: replace control and line-separator characters.*
@@ -114,7 +114,7 @@
 ---
 
 ### [`tests/test_cli.py`](tests/test_cli.py)
-**Size**: `197` lines (`8820` bytes)
+**Size**: `192` lines (`8435` bytes)
 
 **Classes:**
 - `class CliTests`

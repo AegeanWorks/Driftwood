@@ -108,11 +108,6 @@ class CliTests(unittest.TestCase):
         self.assertEqual(third.include, ["y"])
 
     def test_empty_churn_table_returns_zero_with_guidance(self):
-        with mock.patch.object(cli, "repo_root", return_value=Path(".")):
-            with mock.patch.object(cli, "collect_churn", return_value={}):
-                with mock.patch.object(cli, "complexity_map", return_value={}):
-                    code, out, _ = self._run(["repo"], churn={})
-                    # _run mocks collect_churn with default churn; call directly for empty
         output = io.StringIO()
         with mock.patch.object(cli, "repo_root", return_value=Path(".")):
             with mock.patch.object(cli, "collect_churn", return_value={}):

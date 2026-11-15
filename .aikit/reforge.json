@@ -1,8 +1,8 @@
 {
   "schema": 2,
-  "next_run_id": 3,
+  "next_run_id": 4,
   "active_run": null,
-  "last_run": "run-2",
+  "last_run": "run-3",
   "runs": [
     {
       "id": "run-1",
@@ -673,55 +673,557 @@
           "timestamp": "2026-10-29T19:43:15"
         }
       ]
+    },
+    {
+      "id": "run-3",
+      "start": 16,
+      "step": 3,
+      "stop": 16,
+      "stage": 1,
+      "window": 16,
+      "audited_commits": [
+        "b21399d178763630bbae28ddeae82697d6b5b326",
+        "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+        "69da532c1672977643119b1822fe870f66e5d15d",
+        "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+        "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+        "360347a9144463edf3d11fe15cadd23cdf78e952",
+        "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+        "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+        "f2395b85110cf84594f316356628c78be36e9182",
+        "b4827a55925e80c5daf8530f35703fc52e4da724",
+        "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
+        "ef77c0781bfceb95f66f30589d247e54fda46647",
+        "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+        "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+      ],
+      "status": "completed",
+      "created": "2026-11-15T19:42:26",
+      "updated": "2026-11-15T19:52:08",
+      "last_audit": {
+        "run": "run-3",
+        "stage": 1,
+        "window": 16,
+        "commits": [
+          "b21399d178763630bbae28ddeae82697d6b5b326",
+          "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+          "69da532c1672977643119b1822fe870f66e5d15d",
+          "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+          "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+          "360347a9144463edf3d11fe15cadd23cdf78e952",
+          "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+          "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+          "f2395b85110cf84594f316356628c78be36e9182",
+          "b4827a55925e80c5daf8530f35703fc52e4da724",
+          "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
+          "ef77c0781bfceb95f66f30589d247e54fda46647",
+          "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+          "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+          "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+        ],
+        "new_commits": [
+          "b21399d178763630bbae28ddeae82697d6b5b326",
+          "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+          "69da532c1672977643119b1822fe870f66e5d15d",
+          "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+          "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+          "360347a9144463edf3d11fe15cadd23cdf78e952",
+          "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+          "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+          "f2395b85110cf84594f316356628c78be36e9182",
+          "b4827a55925e80c5daf8530f35703fc52e4da724",
+          "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
+          "ef77c0781bfceb95f66f30589d247e54fda46647",
+          "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+          "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+          "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+        ],
+        "prior_commits": [],
+        "findings": [
+          {
+            "code": "review-silently-ignored-bad-since",
+            "category": "improvement",
+            "severity": "low",
+            "path": "driftwood/gitlog.py",
+            "line": 142,
+            "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+            "evidence": "args.append(f\"--since={since}\")",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          }
+        ],
+        "repairs": [
+          {
+            "code": "review-symlink-ancestor-escape",
+            "path": "driftwood/complexity.py",
+            "line": 100,
+            "summary": "applied review suggestion: Containment checks only the leaf candidate: a symlinked ancestor directory still",
+            "test_name": "",
+            "applied": true
+          },
+          {
+            "code": "review-bidi-chars-not-sanitized",
+            "path": "driftwood/report.py",
+            "line": 17,
+            "summary": "applied review suggestion: _sanitize_path handles C0, DEL and the line separators, but not the Unicode bidi",
+            "test_name": "",
+            "applied": true
+          },
+          {
+            "code": "review-dead-assertion-free-test-block",
+            "path": "tests/test_cli.py",
+            "line": 114,
+            "summary": "applied review suggestion: The first with-block in test_empty_churn_table_returns_zero_with_guidance runs c",
+            "test_name": "",
+            "applied": true
+          }
+        ],
+        "counts": {
+          "improvement": 1
+        },
+        "reviewed": 28,
+        "review": {
+          "status": "reviewed",
+          "rejected": [
+            "driftwood/report.py:17: the evidence is not in the current file (it may quote a removed line)",
+            "driftwood/complexity.py:100: the evidence is not in the current file (it may quote a removed line)",
+            "tests/test_cli.py:114: the evidence is not in the current file (it may quote a removed line)"
+          ],
+          "files": [
+            ".aikit/codebase_map.md",
+            ".aikit/decisions.md",
+            ".aikit/guidelines.md",
+            ".aikit/media.json",
+            ".aikit/project.json",
+            ".gitignore",
+            "COMMERCIAL.md",
+            "LICENSE",
+            "LICENSES/LicenseRef-AL-1.1.txt",
+            "README.md",
+            "REUSE.toml",
+            "assets/logo.svg",
+            "assets/social-preview.svg",
+            "driftwood/__init__.py",
+            "driftwood/__main__.py",
+            "driftwood/cli.py",
+            "driftwood/complexity.py",
+            "driftwood/gitlog.py",
+            "driftwood/report.py",
+            "driftwood/scoring.py",
+            "pyproject.toml",
+            "tests/__init__.py",
+            "tests/test_cli.py",
+            "tests/test_complexity.py",
+            "tests/test_gitlog.py",
+            "tests/test_integration_git.py",
+            "tests/test_report.py",
+            "tests/test_scoring.py"
+          ],
+          "packet": ".aikit/reforge.reviews/stage-run-3-1-b21399d17876.md",
+          "redacted": 0,
+          "reason": "",
+          "method": "host",
+          "coverage": {
+            "reported": 167,
+            "total": 167,
+            "missing": [],
+            "unknown": [],
+            "invalid": []
+          },
+          "findings": [
+            {
+              "code": "review-silently-ignored-bad-since",
+              "category": "improvement",
+              "severity": "low",
+              "path": "driftwood/gitlog.py",
+              "line": 142,
+              "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+              "evidence": "args.append(f\"--since={since}\")",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            }
+          ]
+        },
+        "skipped": [],
+        "tests": {
+          "command": "C:\\Python314\\python.exe -m unittest discover tests",
+          "code": 0,
+          "passed": true,
+          "output": ".....................s..................................................\n----------------------------------------------------------------------\nRan 72 tests in 1.409s\n\nOK (skipped=1)",
+          "tail": [
+            ".....................s..................................................",
+            "----------------------------------------------------------------------",
+            "Ran 72 tests in 1.409s",
+            "OK (skipped=1)"
+          ]
+        },
+        "gates": {
+          "artifacts": [
+            ".aikit/codebase_map.md"
+          ]
+        },
+        "delivery": {
+          "commit": "",
+          "short": "",
+          "pushed": false,
+          "push_error": null,
+          "empty": false,
+          "timestamp": "2026-11-15T19:52:08"
+        },
+        "timestamp": "2026-11-15T19:42:34",
+        "dirty_targets": []
+      },
+      "history": [
+        {
+          "run": "run-3",
+          "stage": 1,
+          "window": 16,
+          "commits": [
+            "b21399d178763630bbae28ddeae82697d6b5b326",
+            "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+            "69da532c1672977643119b1822fe870f66e5d15d",
+            "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+            "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+            "360347a9144463edf3d11fe15cadd23cdf78e952",
+            "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+            "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+            "f2395b85110cf84594f316356628c78be36e9182",
+            "b4827a55925e80c5daf8530f35703fc52e4da724",
+            "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
+            "ef77c0781bfceb95f66f30589d247e54fda46647",
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+          ],
+          "new_commits": [
+            "b21399d178763630bbae28ddeae82697d6b5b326",
+            "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+            "69da532c1672977643119b1822fe870f66e5d15d",
+            "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+            "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+            "360347a9144463edf3d11fe15cadd23cdf78e952",
+            "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+            "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+            "f2395b85110cf84594f316356628c78be36e9182",
+            "b4827a55925e80c5daf8530f35703fc52e4da724",
+            "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
+            "ef77c0781bfceb95f66f30589d247e54fda46647",
+            "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
+            "4d221853de7376fa1403ae1448484b08e9f3fdc7",
+            "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "6b28af10e6bd122127189847c451e0a8cc0e23b9"
+          ],
+          "prior_commits": [],
+          "findings": [
+            {
+              "code": "review-silently-ignored-bad-since",
+              "category": "improvement",
+              "severity": "low",
+              "path": "driftwood/gitlog.py",
+              "line": 142,
+              "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+              "evidence": "args.append(f\"--since={since}\")",
+              "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+              "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+              "symbol": "",
+              "introduced": true,
+              "reproducible": false,
+              "fixable": false,
+              "interaction": "",
+              "repaired": false,
+              "source": "review",
+              "patch_old": "",
+              "patch_new": ""
+            }
+          ],
+          "repairs": [
+            {
+              "code": "review-symlink-ancestor-escape",
+              "path": "driftwood/complexity.py",
+              "line": 100,
+              "summary": "applied review suggestion: Containment checks only the leaf candidate: a symlinked ancestor directory still",
+              "test_name": "",
+              "applied": true
+            },
+            {
+              "code": "review-bidi-chars-not-sanitized",
+              "path": "driftwood/report.py",
+              "line": 17,
+              "summary": "applied review suggestion: _sanitize_path handles C0, DEL and the line separators, but not the Unicode bidi",
+              "test_name": "",
+              "applied": true
+            },
+            {
+              "code": "review-dead-assertion-free-test-block",
+              "path": "tests/test_cli.py",
+              "line": 114,
+              "summary": "applied review suggestion: The first with-block in test_empty_churn_table_returns_zero_with_guidance runs c",
+              "test_name": "",
+              "applied": true
+            }
+          ],
+          "counts": {
+            "improvement": 1
+          },
+          "reviewed": 28,
+          "review": {
+            "status": "reviewed",
+            "rejected": [
+              "driftwood/report.py:17: the evidence is not in the current file (it may quote a removed line)",
+              "driftwood/complexity.py:100: the evidence is not in the current file (it may quote a removed line)",
+              "tests/test_cli.py:114: the evidence is not in the current file (it may quote a removed line)"
+            ],
+            "files": [
+              ".aikit/codebase_map.md",
+              ".aikit/decisions.md",
+              ".aikit/guidelines.md",
+              ".aikit/media.json",
+              ".aikit/project.json",
+              ".gitignore",
+              "COMMERCIAL.md",
+              "LICENSE",
+              "LICENSES/LicenseRef-AL-1.1.txt",
+              "README.md",
+              "REUSE.toml",
+              "assets/logo.svg",
+              "assets/social-preview.svg",
+              "driftwood/__init__.py",
+              "driftwood/__main__.py",
+              "driftwood/cli.py",
+              "driftwood/complexity.py",
+              "driftwood/gitlog.py",
+              "driftwood/report.py",
+              "driftwood/scoring.py",
+              "pyproject.toml",
+              "tests/__init__.py",
+              "tests/test_cli.py",
+              "tests/test_complexity.py",
+              "tests/test_gitlog.py",
+              "tests/test_integration_git.py",
+              "tests/test_report.py",
+              "tests/test_scoring.py"
+            ],
+            "packet": ".aikit/reforge.reviews/stage-run-3-1-b21399d17876.md",
+            "redacted": 0,
+            "reason": "",
+            "method": "host",
+            "coverage": {
+              "reported": 167,
+              "total": 167,
+              "missing": [],
+              "unknown": [],
+              "invalid": []
+            },
+            "findings": [
+              {
+                "code": "review-silently-ignored-bad-since",
+                "category": "improvement",
+                "severity": "low",
+                "path": "driftwood/gitlog.py",
+                "line": 142,
+                "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+                "evidence": "args.append(f\"--since={since}\")",
+                "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+                "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+                "symbol": "",
+                "introduced": true,
+                "reproducible": false,
+                "fixable": false,
+                "interaction": "",
+                "repaired": false,
+                "source": "review",
+                "patch_old": "",
+                "patch_new": ""
+              }
+            ]
+          },
+          "skipped": [],
+          "tests": {
+            "command": "C:\\Python314\\python.exe -m unittest discover tests",
+            "code": 0,
+            "passed": true,
+            "output": ".....................s..................................................\n----------------------------------------------------------------------\nRan 72 tests in 1.409s\n\nOK (skipped=1)",
+            "tail": [
+              ".....................s..................................................",
+              "----------------------------------------------------------------------",
+              "Ran 72 tests in 1.409s",
+              "OK (skipped=1)"
+            ]
+          },
+          "gates": {
+            "artifacts": [
+              ".aikit/codebase_map.md"
+            ]
+          },
+          "delivery": {
+            "commit": "",
+            "short": "",
+            "pushed": false,
+            "push_error": null,
+            "empty": false,
+            "timestamp": "2026-11-15T19:52:08"
+          },
+          "timestamp": "2026-11-15T19:42:34",
+          "dirty_targets": []
+        }
+      ]
     }
   ],
   "stage": 1,
-  "window": 6,
+  "window": 16,
   "audited_commits": [
+    "b21399d178763630bbae28ddeae82697d6b5b326",
+    "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+    "69da532c1672977643119b1822fe870f66e5d15d",
+    "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+    "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+    "360347a9144463edf3d11fe15cadd23cdf78e952",
+    "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+    "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+    "f2395b85110cf84594f316356628c78be36e9182",
     "b4827a55925e80c5daf8530f35703fc52e4da724",
     "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
     "ef77c0781bfceb95f66f30589d247e54fda46647",
     "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
     "4d221853de7376fa1403ae1448484b08e9f3fdc7",
-    "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+    "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+    "6b28af10e6bd122127189847c451e0a8cc0e23b9"
   ],
   "last_audit": {
-    "run": "run-2",
+    "run": "run-3",
     "stage": 1,
-    "window": 6,
+    "window": 16,
     "commits": [
+      "b21399d178763630bbae28ddeae82697d6b5b326",
+      "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+      "69da532c1672977643119b1822fe870f66e5d15d",
+      "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+      "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+      "360347a9144463edf3d11fe15cadd23cdf78e952",
+      "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+      "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+      "f2395b85110cf84594f316356628c78be36e9182",
       "b4827a55925e80c5daf8530f35703fc52e4da724",
       "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
       "ef77c0781bfceb95f66f30589d247e54fda46647",
       "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
       "4d221853de7376fa1403ae1448484b08e9f3fdc7",
-      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+      "6b28af10e6bd122127189847c451e0a8cc0e23b9"
     ],
     "new_commits": [
+      "b21399d178763630bbae28ddeae82697d6b5b326",
+      "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+      "69da532c1672977643119b1822fe870f66e5d15d",
+      "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+      "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+      "360347a9144463edf3d11fe15cadd23cdf78e952",
+      "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+      "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+      "f2395b85110cf84594f316356628c78be36e9182",
       "b4827a55925e80c5daf8530f35703fc52e4da724",
       "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
       "ef77c0781bfceb95f66f30589d247e54fda46647",
       "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
       "4d221853de7376fa1403ae1448484b08e9f3fdc7",
-      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+      "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+      "6b28af10e6bd122127189847c451e0a8cc0e23b9"
     ],
     "prior_commits": [],
-    "findings": [],
-    "repairs": [],
-    "counts": {},
-    "reviewed": 25,
+    "findings": [
+      {
+        "code": "review-silently-ignored-bad-since",
+        "category": "improvement",
+        "severity": "low",
+        "path": "driftwood/gitlog.py",
+        "line": 142,
+        "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+        "evidence": "args.append(f\"--since={since}\")",
+        "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+        "symbol": "",
+        "introduced": true,
+        "reproducible": false,
+        "fixable": false,
+        "interaction": "",
+        "repaired": false,
+        "source": "review",
+        "patch_old": "",
+        "patch_new": ""
+      }
+    ],
+    "repairs": [
+      {
+        "code": "review-symlink-ancestor-escape",
+        "path": "driftwood/complexity.py",
+        "line": 100,
+        "summary": "applied review suggestion: Containment checks only the leaf candidate: a symlinked ancestor directory still",
+        "test_name": "",
+        "applied": true
+      },
+      {
+        "code": "review-bidi-chars-not-sanitized",
+        "path": "driftwood/report.py",
+        "line": 17,
+        "summary": "applied review suggestion: _sanitize_path handles C0, DEL and the line separators, but not the Unicode bidi",
+        "test_name": "",
+        "applied": true
+      },
+      {
+        "code": "review-dead-assertion-free-test-block",
+        "path": "tests/test_cli.py",
+        "line": 114,
+        "summary": "applied review suggestion: The first with-block in test_empty_churn_table_returns_zero_with_guidance runs c",
+        "test_name": "",
+        "applied": true
+      }
+    ],
+    "counts": {
+      "improvement": 1
+    },
+    "reviewed": 28,
     "review": {
-      "status": "unreviewed",
-      "rejected": [],
+      "status": "reviewed",
+      "rejected": [
+        "driftwood/report.py:17: the evidence is not in the current file (it may quote a removed line)",
+        "driftwood/complexity.py:100: the evidence is not in the current file (it may quote a removed line)",
+        "tests/test_cli.py:114: the evidence is not in the current file (it may quote a removed line)"
+      ],
       "files": [
         ".aikit/codebase_map.md",
         ".aikit/decisions.md",
+        ".aikit/guidelines.md",
         ".aikit/media.json",
         ".aikit/project.json",
         ".gitignore",
+        "COMMERCIAL.md",
         "LICENSE",
         "LICENSES/LicenseRef-AL-1.1.txt",
         "README.md",
+        "REUSE.toml",
         "assets/logo.svg",
         "assets/social-preview.svg",
         "driftwood/__init__.py",
@@ -740,54 +1242,182 @@
         "tests/test_report.py",
         "tests/test_scoring.py"
       ],
-      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-2-1-b4827a55925e.md",
+      "packet": ".aikit/reforge.reviews/stage-run-3-1-b21399d17876.md",
       "redacted": 0,
-      "reason": "awaiting the reviewer's findings",
-      "findings": []
+      "reason": "",
+      "method": "host",
+      "coverage": {
+        "reported": 167,
+        "total": 167,
+        "missing": [],
+        "unknown": [],
+        "invalid": []
+      },
+      "findings": [
+        {
+          "code": "review-silently-ignored-bad-since",
+          "category": "improvement",
+          "severity": "low",
+          "path": "driftwood/gitlog.py",
+          "line": 142,
+          "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+          "evidence": "args.append(f\"--since={since}\")",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        }
+      ]
     },
     "skipped": [],
-    "tests": {},
-    "gates": {},
-    "timestamp": "2026-10-29T19:43:15"
+    "tests": {
+      "command": "C:\\Python314\\python.exe -m unittest discover tests",
+      "code": 0,
+      "passed": true,
+      "output": ".....................s..................................................\n----------------------------------------------------------------------\nRan 72 tests in 1.409s\n\nOK (skipped=1)",
+      "tail": [
+        ".....................s..................................................",
+        "----------------------------------------------------------------------",
+        "Ran 72 tests in 1.409s",
+        "OK (skipped=1)"
+      ]
+    },
+    "gates": {
+      "artifacts": [
+        ".aikit/codebase_map.md"
+      ]
+    },
+    "delivery": {
+      "commit": "",
+      "short": "",
+      "pushed": false,
+      "push_error": null,
+      "empty": false,
+      "timestamp": "2026-11-15T19:52:08"
+    },
+    "timestamp": "2026-11-15T19:42:34",
+    "dirty_targets": []
   },
   "history": [
     {
-      "run": "run-2",
+      "run": "run-3",
       "stage": 1,
-      "window": 6,
+      "window": 16,
       "commits": [
+        "b21399d178763630bbae28ddeae82697d6b5b326",
+        "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+        "69da532c1672977643119b1822fe870f66e5d15d",
+        "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+        "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+        "360347a9144463edf3d11fe15cadd23cdf78e952",
+        "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+        "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+        "f2395b85110cf84594f316356628c78be36e9182",
         "b4827a55925e80c5daf8530f35703fc52e4da724",
         "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
         "ef77c0781bfceb95f66f30589d247e54fda46647",
         "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
         "4d221853de7376fa1403ae1448484b08e9f3fdc7",
-        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
       ],
       "new_commits": [
+        "b21399d178763630bbae28ddeae82697d6b5b326",
+        "732a67e17fb3750f1fb9b64a8a00ace9988e2746",
+        "69da532c1672977643119b1822fe870f66e5d15d",
+        "99656bdd75894e7ffbef6b1ac52a5f258849ec27",
+        "4a2ce259c0d4b95938c9e016558f4bc67acf3506",
+        "360347a9144463edf3d11fe15cadd23cdf78e952",
+        "23bffedadc33aecb7e2d62ea87eb735acf8bbb56",
+        "85f9f8a30885f85c0d18b0e862d2bfbbbd61191b",
+        "f2395b85110cf84594f316356628c78be36e9182",
         "b4827a55925e80c5daf8530f35703fc52e4da724",
         "5dfa50203a2e06791c29dad401fb0d3e93ba0d70",
         "ef77c0781bfceb95f66f30589d247e54fda46647",
         "b8835f94c97d1839f6da88b4b39c0d74100b43a2",
         "4d221853de7376fa1403ae1448484b08e9f3fdc7",
-        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4"
+        "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+        "6b28af10e6bd122127189847c451e0a8cc0e23b9"
       ],
       "prior_commits": [],
-      "findings": [],
-      "repairs": [],
-      "counts": {},
-      "reviewed": 25,
+      "findings": [
+        {
+          "code": "review-silently-ignored-bad-since",
+          "category": "improvement",
+          "severity": "low",
+          "path": "driftwood/gitlog.py",
+          "line": 142,
+          "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+          "evidence": "args.append(f\"--since={since}\")",
+          "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+          "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+          "symbol": "",
+          "introduced": true,
+          "reproducible": false,
+          "fixable": false,
+          "interaction": "",
+          "repaired": false,
+          "source": "review",
+          "patch_old": "",
+          "patch_new": ""
+        }
+      ],
+      "repairs": [
+        {
+          "code": "review-symlink-ancestor-escape",
+          "path": "driftwood/complexity.py",
+          "line": 100,
+          "summary": "applied review suggestion: Containment checks only the leaf candidate: a symlinked ancestor directory still",
+          "test_name": "",
+          "applied": true
+        },
+        {
+          "code": "review-bidi-chars-not-sanitized",
+          "path": "driftwood/report.py",
+          "line": 17,
+          "summary": "applied review suggestion: _sanitize_path handles C0, DEL and the line separators, but not the Unicode bidi",
+          "test_name": "",
+          "applied": true
+        },
+        {
+          "code": "review-dead-assertion-free-test-block",
+          "path": "tests/test_cli.py",
+          "line": 114,
+          "summary": "applied review suggestion: The first with-block in test_empty_churn_table_returns_zero_with_guidance runs c",
+          "test_name": "",
+          "applied": true
+        }
+      ],
+      "counts": {
+        "improvement": 1
+      },
+      "reviewed": 28,
       "review": {
-        "status": "unreviewed",
-        "rejected": [],
+        "status": "reviewed",
+        "rejected": [
+          "driftwood/report.py:17: the evidence is not in the current file (it may quote a removed line)",
+          "driftwood/complexity.py:100: the evidence is not in the current file (it may quote a removed line)",
+          "tests/test_cli.py:114: the evidence is not in the current file (it may quote a removed line)"
+        ],
         "files": [
           ".aikit/codebase_map.md",
           ".aikit/decisions.md",
+          ".aikit/guidelines.md",
           ".aikit/media.json",
           ".aikit/project.json",
           ".gitignore",
+          "COMMERCIAL.md",
           "LICENSE",
           "LICENSES/LicenseRef-AL-1.1.txt",
           "README.md",
+          "REUSE.toml",
           "assets/logo.svg",
           "assets/social-preview.svg",
           "driftwood/__init__.py",
@@ -806,15 +1436,68 @@
           "tests/test_report.py",
           "tests/test_scoring.py"
         ],
-        "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\driftwood\\.aikit\\reforge.reviews\\stage-run-2-1-b4827a55925e.md",
+        "packet": ".aikit/reforge.reviews/stage-run-3-1-b21399d17876.md",
         "redacted": 0,
-        "reason": "awaiting the reviewer's findings",
-        "findings": []
+        "reason": "",
+        "method": "host",
+        "coverage": {
+          "reported": 167,
+          "total": 167,
+          "missing": [],
+          "unknown": [],
+          "invalid": []
+        },
+        "findings": [
+          {
+            "code": "review-silently-ignored-bad-since",
+            "category": "improvement",
+            "severity": "low",
+            "path": "driftwood/gitlog.py",
+            "line": 142,
+            "message": "A malformed --since value (for example 'not a date') is forwarded to git verbatim; git accepts it and returns an empty log, so the user sees 'No hotspots found' with guidance to widen --since instead of a signal that the date itself is unparseable. Warning when --since is set and churn comes back empty, or pre-validating the date, would separate a syntax error from a genuinely quiet range.",
+            "evidence": "args.append(f\"--since={since}\")",
+            "commit": "6987adbdb4c6cdc8dc38629bdc153e2befa35db4",
+            "hunk": "6987adbdb4c6:driftwood/gitlog.py#1",
+            "symbol": "",
+            "introduced": true,
+            "reproducible": false,
+            "fixable": false,
+            "interaction": "",
+            "repaired": false,
+            "source": "review",
+            "patch_old": "",
+            "patch_new": ""
+          }
+        ]
       },
       "skipped": [],
-      "tests": {},
-      "gates": {},
-      "timestamp": "2026-10-29T19:43:15"
+      "tests": {
+        "command": "C:\\Python314\\python.exe -m unittest discover tests",
+        "code": 0,
+        "passed": true,
+        "output": ".....................s..................................................\n----------------------------------------------------------------------\nRan 72 tests in 1.409s\n\nOK (skipped=1)",
+        "tail": [
+          ".....................s..................................................",
+          "----------------------------------------------------------------------",
+          "Ran 72 tests in 1.409s",
+          "OK (skipped=1)"
+        ]
+      },
+      "gates": {
+        "artifacts": [
+          ".aikit/codebase_map.md"
+        ]
+      },
+      "delivery": {
+        "commit": "",
+        "short": "",
+        "pushed": false,
+        "push_error": null,
+        "empty": false,
+        "timestamp": "2026-11-15T19:52:08"
+      },
+      "timestamp": "2026-11-15T19:42:34",
+      "dirty_targets": []
     }
   ]
 }
