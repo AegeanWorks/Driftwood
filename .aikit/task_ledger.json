@@ -1,36 +1,22 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "driftwood-stdout-include-fixes",
-    "last_phase": "in_progress",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794759839.5735075,
+    "task_id": "reforge:run-3",
+    "last_phase": "phase 4",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794761630.9262173,
     "owner": "vibe:1",
     "started_by": "vibe:1",
     "continuations": [],
-    "impact_assessment": {
-      "why": "Real behaviour-coverage for broken pipe and empty include; suite is no longer poisoned under pytest capture",
-      "benefits": "test-in-host safety, documented include contract honoured, silent HS exit kept",
-      "risks": "contract: exit 0 on broken pipe unchanged; dependency: os stdlib only; concurrency: none; state: none",
-      "mitigation": "failing-first tests + real-fd coverage; gates green before commit"
-    },
-    "completed_at": 1794759886.3978372,
-    "completed_head": "b21399d178763630bbae28ddeae82697d6b5b326",
-    "completed_tree": "33c4e3de6629f93eb436a3a536db9a64dd0b21ba"
+    "workspaces": [
+      {
+        "name": "driftwood",
+        "path": "projects/driftwood"
+      }
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 1",
-      "phase_num": 3,
-      "description": "Reforge stage 1: window 3, 3 commit(s), 22 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291038.235267,
-      "timestamp_str": "2026-10-29 19:23:58",
-      "agent": "opencode"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 2",
@@ -262,6 +248,24 @@
       "timestamp": 1794761567.001372,
       "timestamp_str": "2026-11-15 19:52:47",
       "agent": "unidentified"
+    },
+    {
+      "task_id": "reforge:run-3",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "run-3 stage 1 complete: 167/167 hunks reviewed via host, 3 repairs applied and committed aef4246",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794761630.9262173,
+      "timestamp_str": "2026-11-15 19:53:50",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
     }
   ]
 }
