@@ -3,9 +3,9 @@
   "active_task": {
     "task_id": "reforge:run-3",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
-    "updated_at": 1794761630.9262173,
+    "active_phase": 5,
+    "status": "completed",
+    "updated_at": 1794761990.7100513,
     "owner": "vibe:1",
     "started_by": "vibe:1",
     "continuations": [],
@@ -14,31 +14,12 @@
         "name": "driftwood",
         "path": "projects/driftwood"
       }
-    ]
+    ],
+    "completed_at": 1794761991.143306,
+    "completed_head": "acb67d31e21d7841281c2f5c49d9f5e91e0f4a42",
+    "completed_tree": "4dffac8a97b4bfeea758802c71868425712f921c"
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 2",
-      "phase_num": 3,
-      "description": "Reforge stage 2: window 4, 1 commit(s), 9 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793291361.336767,
-      "timestamp_str": "2026-10-29 19:29:21",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 2",
-      "phase_num": 3,
-      "description": "Reforge stage 2: run stopped at stage 2; resume it with `reforge resume`",
-      "files_affected": [],
-      "status": "suspended",
-      "timestamp": 1793291439.1232123,
-      "timestamp_str": "2026-10-29 19:30:39",
-      "agent": "opencode"
-    },
     {
       "task_id": "driftwood-reforge-fixes",
       "phase": "phase 2",
@@ -266,6 +247,40 @@
           "path": "projects/driftwood"
         }
       ]
+    },
+    {
+      "task_id": "reforge:run-3",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "run-3 close: gates 4/4 (test/hygiene/guidelines/secrets), repairs committed aef4246, tree clean",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794761990.7100513,
+      "timestamp_str": "2026-11-15 19:59:50",
+      "agent": "vibe:1",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "driftwood",
+          "path": "projects/driftwood"
+        }
+      ]
+    },
+    {
+      "task_id": "reforge:run-3",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'reforge:run-3' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794761991.1854901,
+      "timestamp_str": "2026-11-15 19:59:51",
+      "agent": "vibe:1",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
